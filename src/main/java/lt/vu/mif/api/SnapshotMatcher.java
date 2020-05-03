@@ -8,7 +8,7 @@ public class SnapshotMatcher {
     }
 
     public static Snapshot expect(Object object) {
-        return new Snapshot(, object);
+        return new Snapshot(object);
     }
 
     public static SnapshotConfig configuration() {

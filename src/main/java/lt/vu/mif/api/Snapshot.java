@@ -3,15 +3,18 @@ package lt.vu.mif.api;
 import lt.vu.mif.config.SnapshotConfig;
 
 public class Snapshot<T> {
-    private final SnapshotMatcher matcher;
     private final T object;
     private DynamicFields dynamicFields;
 
-    void toMatchSnapshot() {
+    public Snapshot(T object) {
+        this.object = object;
+    }
+
+    public void toMatchSnapshot() {
 
     }
 
-    Snapshot with(DynamicFields dynamicFields) {
+    public Snapshot with(DynamicFields dynamicFields) {
         this.dynamicFields = dynamicFields;
         return this;
     }

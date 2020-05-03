@@ -4,25 +4,25 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Matcher {
+public class FieldMatch {
     private final Set<String> includes = new HashSet<>();
     private final Set<String> excludes = new HashSet<>();
 
-    private Matcher() {
+    private FieldMatch() {
     }
 
-    public Matcher match() {
-        return new Matcher();
+    public static FieldMatch match() {
+        return new FieldMatch();
     }
 
-    public Matcher include(String... fields) {
+    public FieldMatch include(String... fields) {
         if (fields != null) {
             this.includes.addAll(Arrays.asList(fields));
         }
         return this;
     }
 
-    public Matcher exclude(String... fields) {
+    public FieldMatch exclude(String... fields) {
         if (fields != null) {
             this.excludes.addAll(Arrays.asList(fields));
         }

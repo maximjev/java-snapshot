@@ -1,4 +1,4 @@
-package lt.vu.mif.storage;
+package lt.vu.mif.javasnapshot.storage;
 
 public interface SnapshotStorage {
     void store(SnapshotFile file);

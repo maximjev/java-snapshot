@@ -1,4 +1,4 @@
-package lt.vu.mif.diff;
+package lt.vu.mif.javasnapshot.diff;
 
 import com.github.difflib.DiffUtils;
 import com.github.difflib.algorithm.DiffException;
@@ -17,7 +17,7 @@ public class SnapshotDiff {
         this.actual = actual;
     }
 
-    void print() {
+    public void print() {
         try {
             Patch<String> patch = DiffUtils.diff(
                     Arrays.asList(expected.trim().split(NEW_LN)),

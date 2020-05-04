@@ -1,4 +1,4 @@
-package lt.vu.mif.model;
+package lt.vu.mif.javasnapshot.model;
 
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.JsonNode;

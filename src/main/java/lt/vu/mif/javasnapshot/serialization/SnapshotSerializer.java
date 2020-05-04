@@ -1,6 +1,6 @@
-package lt.vu.mif.serialization;
+package lt.vu.mif.javasnapshot.serialization;
 
-import lt.vu.mif.api.Snapshot;
+import lt.vu.mif.javasnapshot.Snapshot;
 
 public interface SnapshotSerializer {
     String serialize(Snapshot snapshot);

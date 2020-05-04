@@ -1,4 +1,4 @@
-package lt.vu.mif.model;
+package lt.vu.mif.javasnapshot.model;
 
 
 public class TestSubobject {

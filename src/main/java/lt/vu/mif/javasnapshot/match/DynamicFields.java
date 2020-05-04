@@ -1,4 +1,4 @@
-package lt.vu.mif.api;
+package lt.vu.mif.javasnapshot.match;
 
 import java.util.HashMap;
 import java.util.Map;

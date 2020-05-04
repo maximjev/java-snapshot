@@ -1,11 +1,11 @@
-package lt.vu.mif.model;
+package lt.vu.mif.javasnapshot.model;
 
 import java.util.LinkedHashMap;
 
 /**
  * Acts as a map but prevents keys from being overwritten
  */
-public class NonReplacableKeyMap<K, V> extends LinkedHashMap<K, V> {
+public class NonReplaceableKeyMap<K, V> extends LinkedHashMap<K, V> {
   @Override
   public V put(K key, V value) {
     if(containsKey(key)) {

@@ -1,4 +1,4 @@
-package lt.vu.mif.javasnapshot.storage;
+package lt.vu.mif.javasnapshot.exception;
 
 public class SnapshotFileException extends RuntimeException {
     public SnapshotFileException(String message) {

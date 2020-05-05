@@ -1,11 +1,11 @@
-package lt.vu.mif.javasnapshot.storage;
+package lt.vu.mif.javasnapshot;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-public class SameDirSnapshotStorage implements SnapshotStorage {
+class SameDirSnapshotStorage implements SnapshotStorage {
+    private static String DOT_SEPARATOR = "%.%";
+
     private String filePath;
     private String extension;
 
@@ -17,22 +17,17 @@ public class SameDirSnapshotStorage implements SnapshotStorage {
     }
 
     @Override
-    public void store(SnapshotFile file) {
-
-    }
-
-    @Override
-    public SnapshotFile get(String className) {
-        if (currentFiles.containsKey(className)) {
-            return currentFiles.get(className);
+    public SnapshotFile get(String name) {
+        if (currentFiles.containsKey(name)) {
+            return currentFiles.get(name);
         }
         SnapshotFile file = new SnapshotFile
                 .Builder()
                 .withPath(filePath)
-                .withClassName(className)
+                .withName(name)
                 .build();
 
-        currentFiles.put(className, file);
+        currentFiles.put(name, file);
         return file;
     }
 

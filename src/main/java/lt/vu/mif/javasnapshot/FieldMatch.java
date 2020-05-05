@@ -1,4 +1,4 @@
-package lt.vu.mif.javasnapshot.match;
+package lt.vu.mif.javasnapshot;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -29,11 +29,11 @@ public class FieldMatch {
         return this;
     }
 
-    public Set<String> getIncludes() {
+    Set<String> getIncludes() {
         return includes;
     }
 
-    public Set<String> getExcludes() {
+    Set<String> getExcludes() {
         return excludes;
     }
 }

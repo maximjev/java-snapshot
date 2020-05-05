@@ -1,10 +1,7 @@
 package lt.vu.mif.javasnapshot;
 
-import lt.vu.mif.javasnapshot.diff.SnapshotDiff;
-import lt.vu.mif.javasnapshot.serialization.SnapshotSerializer;
-import lt.vu.mif.javasnapshot.storage.SnapshotFile;
-import lt.vu.mif.javasnapshot.storage.SnapshotFileException;
-import lt.vu.mif.javasnapshot.storage.SnapshotStorage;
+import lt.vu.mif.javasnapshot.exception.SnapshotMismatchException;
+import lt.vu.mif.javasnapshot.exception.SnapshotFileException;
 
 import java.util.HashSet;
 import java.util.List;
@@ -30,28 +27,40 @@ final class SnapshotValidator {
 
     void validate(Snapshot snapshot) {
         StackTraceElement element = findCaller();
-        String methodName = element.getMethodName();
+        String method = element.getMethodName();
+        String name = snapshot.getScenario().isPresent()
+                ? formatScenario(method, snapshot.getScenario().get())
+                : method;
 
         SnapshotFile file = storage.get(element.getClassName());
         String content = serializer.serialize(snapshot);
 
-        if (file.exists(methodName)) {
-            compare(file.get(methodName), content);
+        if (file.exists(name)) {
+            compare(file.get(name), content);
         } else {
-            file.push(methodName, content);
+            file.push(name, content);
         }
     }
 
+    private String formatScenario(String name, String scenario) {
+        return String.format("%s[%s]", name, scenario);
+    }
+
     private StackTraceElement findCaller() {
-        return Stream.of(Thread.currentThread().getStackTrace())
+        StackTraceElement lastCaller = Stream.of(Thread.currentThread().getStackTrace())
                 .filter(s -> !SKIPPED_CLASSES.contains(s.getClassName()))
                 .findFirst()
                 .orElseThrow(() -> new SnapshotFileException("Failed to find caller class"));
+
+        return Stream.of(Thread.currentThread().getStackTrace())
+                .filter(s -> s.getClassName().equals(lastCaller.getClassName()))
+                .reduce((first, last) -> last)
+                .orElse(lastCaller);
     }
 
     private void compare(String expected, String actual) {
         if (!expected.equals(actual)) {
-            new SnapshotDiff(expected, actual).print();
+            throw new SnapshotMismatchException(String.format("expected: %s but was: %s", expected, actual));
         }
     }
 }

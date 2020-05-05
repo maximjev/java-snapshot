@@ -1,4 +1,4 @@
-package lt.vu.mif.javasnapshot.serialization;
+package lt.vu.mif.javasnapshot;
 
 
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableMap;
 import lt.vu.mif.javasnapshot.Snapshot;
 import lt.vu.mif.javasnapshot.SnapshotConfig;
+import lt.vu.mif.javasnapshot.JsonSnapshotSerializer;
 import lt.vu.mif.javasnapshot.model.NonReplaceableKeyMap;
 import lt.vu.mif.javasnapshot.model.TestObject;
 import lt.vu.mif.javasnapshot.model.TestSubobject;
@@ -18,8 +19,8 @@ import java.util.List;
 import java.util.Map;
 
 import static java.util.Arrays.asList;
-import static lt.vu.mif.javasnapshot.match.DynamicFields.*;
-import static lt.vu.mif.javasnapshot.match.FieldMatch.*;
+import static lt.vu.mif.javasnapshot.DynamicFields.*;
+import static lt.vu.mif.javasnapshot.FieldMatch.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SuppressWarnings("unchecked")

@@ -1,4 +1,6 @@
-package lt.vu.mif.javasnapshot.storage;
+package lt.vu.mif.javasnapshot;
+
+import lt.vu.mif.javasnapshot.exception.SnapshotFileException;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,7 +15,7 @@ import java.util.stream.Stream;
 import static java.lang.String.*;
 import static java.util.stream.Collectors.*;
 
-public class SnapshotFile {
+class SnapshotFile {
     private static final String SNAPSHOT_SEPARATOR = "\n\n\n";
     private static final String ENTRY_SEPARATOR = "=";
     private static final String DOT_SEPARATOR = "%s.%s";
@@ -26,9 +28,9 @@ public class SnapshotFile {
     private Map<String, String> snapshots = new HashMap<>();
 
     private SnapshotFile(Builder builder) {
-        this.fileName = resolveFileName(Objects.requireNonNull(builder.className));
+        this.fileName = resolveFileName(Objects.requireNonNull(builder.name));
         this.filePath = Paths.get(Objects.requireNonNull(builder.path), String.format(DOT_SEPARATOR, fileName, FILE_EXTENSION));
-        this.snapshotPrefix = builder.className;
+        this.snapshotPrefix = builder.name;
 
         init();
     }
@@ -106,18 +108,17 @@ public class SnapshotFile {
         return tokens[tokens.length - 1];
     }
 
-
     static final class Builder {
         private String path;
-        private String className;
+        private String name;
 
         Builder withPath(String path) {
             this.path = path;
             return this;
         }
 
-        Builder withClassName(String className) {
-            this.className = className;
+        Builder withName(String name) {
+            this.name = name;
             return this;
         }
 

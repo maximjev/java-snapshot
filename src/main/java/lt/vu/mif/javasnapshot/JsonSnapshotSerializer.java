@@ -1,17 +1,16 @@
-package lt.vu.mif.javasnapshot.serialization;
+package lt.vu.mif.javasnapshot;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.PrettyPrinter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.monitorjbl.json.*;
-import lt.vu.mif.javasnapshot.match.FieldMatch;
-import lt.vu.mif.javasnapshot.Snapshot;
+import lt.vu.mif.javasnapshot.exception.SerializationException;
 
 import java.util.Map;
 import java.util.stream.Stream;
 
 
-public class JsonSnapshotSerializer implements SnapshotSerializer {
+class JsonSnapshotSerializer implements SnapshotSerializer {
 
     private final ObjectMapper mapper;
     private final PrettyPrinter prettyPrinter;

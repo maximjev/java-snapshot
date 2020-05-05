@@ -9,19 +9,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.monitorjbl.json.JsonViewModule;
 import com.monitorjbl.json.JsonViewSerializer;
-import lt.vu.mif.javasnapshot.serialization.JsonSnapshotSerializer;
-import lt.vu.mif.javasnapshot.serialization.SerializerType;
-import lt.vu.mif.javasnapshot.serialization.SnapshotSerializer;
-import lt.vu.mif.javasnapshot.storage.SameDirSnapshotStorage;
-import lt.vu.mif.javasnapshot.storage.SnapshotStorage;
-import lt.vu.mif.javasnapshot.storage.StorageType;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public final class SnapshotConfig {
-    private static String FILE_PATH = "src/test/java";
-    private static String FILE_EXTENSION = "snap";
+    private String filePath = "src/test/java";
+    private String fileExtension = "snap";
 
     private static SnapshotConfig INSTANCE;
 
@@ -40,14 +34,7 @@ public final class SnapshotConfig {
         prettyPrinter = prettyPrinter();
 
         serializers.add(new JsonSnapshotSerializer(objectMapper, prettyPrinter));
-        storages.add(new SameDirSnapshotStorage(FILE_PATH, FILE_EXTENSION));
-    }
-
-    public static SnapshotConfig getInstance() {
-        if (INSTANCE == null) {
-            INSTANCE = new SnapshotConfig();
-        }
-        return SnapshotConfig.INSTANCE;
+        storages.add(new SameDirSnapshotStorage(filePath, fileExtension));
     }
 
     SnapshotValidator snapshotValidator() {
@@ -99,19 +86,54 @@ public final class SnapshotConfig {
         };
     }
 
+    public static SnapshotConfig getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new SnapshotConfig();
+        }
+        return SnapshotConfig.INSTANCE;
+    }
+
+    public PrettyPrinter getPrettyPrinter() {
+        return prettyPrinter;
+    }
+
     public ObjectMapper getObjectMapper() {
         return objectMapper;
     }
 
     public SnapshotConfig withStorageType(StorageType storageType) {
-        SnapshotConfig config = getInstance();
-        config.storageType = storageType;
-        return config;
+        this.storageType = storageType;
+        return this;
+    }
+
+    public StorageType getStorageType() {
+        return storageType;
     }
 
     public SnapshotConfig withSerializationType(SerializerType serializerType) {
-        SnapshotConfig config = getInstance();
-        config.serializerType = serializerType;
-        return config;
+        this.serializerType = serializerType;
+        return this;
+    }
+
+    public SerializerType getSerializerType() {
+        return serializerType;
+    }
+
+    public SnapshotConfig withFilePath(String filePath) {
+        this.filePath = filePath;
+        return this;
+    }
+
+    public String getFilePath() {
+        return filePath;
+    }
+
+    public SnapshotConfig withFileExtension(String fileExtension) {
+        this.fileExtension = fileExtension;
+        return this;
+    }
+
+    public String getFileExtension() {
+        return fileExtension;
     }
 }

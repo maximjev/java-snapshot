@@ -1,4 +1,4 @@
-package lt.vu.mif.javasnapshot.serialization;
+package lt.vu.mif.javasnapshot.exception;
 
 public class SerializationException extends RuntimeException {
     public SerializationException(String message) {

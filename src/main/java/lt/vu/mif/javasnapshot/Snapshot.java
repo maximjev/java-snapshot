@@ -1,12 +1,7 @@
 package lt.vu.mif.javasnapshot;
 
 
-import com.google.common.collect.ObjectArrays;
-import com.google.common.collect.Streams;
-import lt.vu.mif.javasnapshot.match.DynamicFields;
-
-import java.util.Arrays;
-import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import static com.google.common.collect.ObjectArrays.*;
@@ -16,8 +11,10 @@ import static java.util.Optional.*;
 public class Snapshot {
     private final Object object;
     private DynamicFields dynamicFields;
+    private String scenario;
 
     private Snapshot(Object object) {
+        Objects.requireNonNull(object);
         this.object = object;
     }
 
@@ -32,12 +29,21 @@ public class Snapshot {
         return this;
     }
 
-    public Object getObject() {
+    public Snapshot scenario(String scenario) {
+        this.scenario = scenario;
+        return this;
+    }
+
+    Object getObject() {
         return object;
     }
 
-    public Optional<DynamicFields> getDynamicFields() {
+    Optional<DynamicFields> getDynamicFields() {
         return ofNullable(dynamicFields);
+    }
+
+    Optional<String> getScenario() {
+        return ofNullable(scenario);
     }
 
     public static Snapshot expect(Object object, Object... others) {

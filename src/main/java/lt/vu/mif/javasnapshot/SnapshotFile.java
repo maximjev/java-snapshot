@@ -20,7 +20,6 @@ class SnapshotFile {
     private static final String SNAPSHOT_SEPARATOR = "\n\n\n";
     private static final String ENTRY_SEPARATOR = "=";
     private static final String DOT_SEPARATOR = "%s.%s";
-    private static final String FILE_EXTENSION = "snap";
 
     private final String fileName;
     private final String snapshotPrefix;
@@ -29,8 +28,10 @@ class SnapshotFile {
     private Map<String, String> snapshots = new HashMap<>();
 
     private SnapshotFile(Builder builder) {
-        this.fileName = resolveFileName(Objects.requireNonNull(builder.name));
-        this.filePath = Paths.get(Objects.requireNonNull(builder.path), String.format(DOT_SEPARATOR, fileName, FILE_EXTENSION));
+        Objects.requireNonNull(builder.path);
+        Objects.requireNonNull(builder.name);
+        this.fileName = resolveFileName(builder.name);
+        this.filePath = Paths.get(builder.path, String.format(DOT_SEPARATOR, fileName, builder.extension));
         this.snapshotPrefix = builder.name;
 
         init();
@@ -47,6 +48,9 @@ class SnapshotFile {
 
     private void create(File file) {
         try {
+            if (!file.canWrite()) {
+                file.getParentFile().mkdirs();
+            }
             file.createNewFile();
         } catch (IOException e) {
             throw new SnapshotFileException(String.format("Failed to create snapshot file: %s", fileName), e);
@@ -109,16 +113,28 @@ class SnapshotFile {
     }
 
     static final class Builder {
-        private String path;
         private String name;
+        private String path;
+        private String extension;
+        private StorageType storageType;
+
+        Builder withName(String name) {
+            this.name = name;
+            return this;
+        }
 
         Builder withPath(String path) {
             this.path = path;
             return this;
         }
 
-        Builder withName(String name) {
-            this.name = name;
+        Builder withExtension(String extension) {
+            this.extension = extension;
+            return this;
+        }
+
+        Builder withStorageType(StorageType storageType) {
+            this.storageType = storageType;
             return this;
         }
 

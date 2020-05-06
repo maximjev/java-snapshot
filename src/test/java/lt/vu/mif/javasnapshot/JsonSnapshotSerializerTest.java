@@ -125,7 +125,9 @@ public class JsonSnapshotSerializerTest {
         ref.setSub(new TestSubobject("subvalue", new TestSubobject("subsubvalue")));
 
         Snapshot snapshot = Snapshot.expect(ref)
-                .with(dynamicFields(TestObject.class, match().exclude("int1", "str1", "list", "stringArray", "sub")));
+                .withDynamicFields()
+                .onClass(TestObject.class, match().exclude("int1", "str1", "list", "stringArray", "sub"))
+                .build();
 
         String serialized = serializer.serialize(snapshot);
         Map<String, Object> obj = Arrays.asList(mapper.readValue(serialized, NonReplaceableKeyMap[].class)).get(0);
@@ -143,7 +145,9 @@ public class JsonSnapshotSerializerTest {
         ref.setSub(new TestSubobject("subvalue", new TestSubobject("subsubvalue")));
 
         Snapshot snapshot = Snapshot.expect(ref)
-                .with(dynamicFields(TestObject.class, match().exclude("sub.val", "sub.sub.val")));
+                .withDynamicFields()
+                .onClass(TestObject.class, match().exclude("sub.val", "sub.sub.val"))
+                .build();
 
         String serialized = serializer.serialize(snapshot);
         Map<String, Object> obj = Arrays.asList(mapper.readValue(serialized, NonReplaceableKeyMap[].class)).get(0);
@@ -166,7 +170,9 @@ public class JsonSnapshotSerializerTest {
         ));
 
         Snapshot snapshot = Snapshot.expect(ref)
-                .with(dynamicFields(TestSubobject.class, match().exclude("sub")));
+                .withDynamicFields()
+                .onClass(TestSubobject.class, match().exclude("sub"))
+                .build();
 
         String serialized = serializer.serialize(snapshot);
         Map<String, Object> obj = Arrays.asList(mapper.readValue(serialized, NonReplaceableKeyMap[].class)).get(0);
@@ -190,7 +196,9 @@ public class JsonSnapshotSerializerTest {
         ref.setSub(new TestSubobject("subvalue", new TestSubobject("subsubvalue")));
 
         Snapshot snapshot = Snapshot.expect(ref)
-                .with(dynamicFields(TestObject.class, match().exclude("*")));
+                .withDynamicFields()
+                .onClass(TestObject.class, match().exclude("*"))
+                .build();
 
         String serialized = serializer.serialize(snapshot);
         Map<String, Object> obj = Arrays.asList(mapper.readValue(serialized, NonReplaceableKeyMap[].class)).get(0);
@@ -211,7 +219,9 @@ public class JsonSnapshotSerializerTest {
         ref.setStringArray(new String[]{"apple", "banana"});
 
         Snapshot snapshot = Snapshot.expect(ref)
-                .with(dynamicFields(TestObject.class, match().exclude("*").include("list", "str1")));
+                .withDynamicFields()
+                .onClass(TestObject.class, match().exclude("*").include("list", "str1"))
+                .build();
 
         String serialized = serializer.serialize(snapshot);
         Map<String, Object> obj = Arrays.asList(mapper.readValue(serialized, NonReplaceableKeyMap[].class)).get(0);
@@ -228,7 +238,9 @@ public class JsonSnapshotSerializerTest {
         ref.setSub(new TestSubobject("subvalue", new TestSubobject("subsubvalue")));
 
         Snapshot snapshot = Snapshot.expect(ref)
-                .with(dynamicFields(TestObject.class, match().exclude("*").include("sub.sub.val")));
+                .withDynamicFields()
+                .onClass(TestObject.class, match().exclude("*").include("sub.sub.val"))
+                .build();
 
         String serialized = serializer.serialize(snapshot);
         Map<String, Object> obj = Arrays.asList(mapper.readValue(serialized, NonReplaceableKeyMap[].class)).get(0);

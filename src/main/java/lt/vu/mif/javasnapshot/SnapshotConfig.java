@@ -10,20 +10,16 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.monitorjbl.json.JsonViewModule;
 import com.monitorjbl.json.JsonViewSerializer;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public final class SnapshotConfig {
     private String filePath = "src/test/java";
     private String fileExtension = "snap";
 
     private static SnapshotConfig INSTANCE;
 
-    private StorageType storageType = StorageType.SAME_DIR;
-    private final List<SnapshotStorage> storages = new ArrayList<>();
-
+    private StorageType storageType = StorageType.FLAT_DIRECTORY;
     private SerializerType serializerType = SerializerType.JSON;
-    private final List<SnapshotSerializer> serializers = new ArrayList<>();
+
+    private SnapshotSerializer snapshotSerializer;
     private ObjectMapper objectMapper;
     private PrettyPrinter prettyPrinter;
 
@@ -33,31 +29,16 @@ public final class SnapshotConfig {
         objectMapper = objectMapper();
         prettyPrinter = prettyPrinter();
 
-        serializers.add(new JsonSnapshotSerializer(objectMapper, prettyPrinter));
-        storages.add(new SameDirSnapshotStorage(filePath, fileExtension));
+        snapshotSerializer = new JsonSnapshotSerializer(objectMapper, prettyPrinter);
     }
 
     SnapshotValidator snapshotValidator() {
         if (validator == null) {
-            validator = new SnapshotValidator(serializer(), storage());
+            validator = new SnapshotValidator(snapshotSerializer);
         }
+
         return validator;
     }
-
-    private SnapshotStorage storage() {
-        return storages.stream()
-                .filter(s -> storageType.equals(s.getType()))
-                .findFirst()
-                .orElseThrow(() -> new UnsupportedOperationException(String.format("Storage for type %s is not implemented", storageType)));
-    }
-
-    private SnapshotSerializer serializer() {
-        return serializers.stream()
-                .filter(s -> serializerType.equals(s.getType()))
-                .findFirst()
-                .orElseThrow(() -> new UnsupportedOperationException(String.format("Serializer for type %s is not implemented", serializerType)));
-    }
-
     private ObjectMapper objectMapper() {
         return new ObjectMapper()
                 .registerModule(new JsonViewModule(new JsonViewSerializer()))
@@ -65,7 +46,6 @@ public final class SnapshotConfig {
                 .setSerializationInclusion(JsonInclude.Include.NON_NULL)
                 .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
     }
-
 
     private PrettyPrinter prettyPrinter() {
         DefaultIndenter indenter = new DefaultIndenter("  ", "\n");

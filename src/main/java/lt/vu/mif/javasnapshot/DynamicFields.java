@@ -7,21 +7,29 @@ import java.util.Objects;
 public class DynamicFields {
     private final Map<Class<?>, FieldMatch> matches = new HashMap<>();
 
-    private DynamicFields() {
-    }
-
-    public DynamicFields and(Class<?> cls, FieldMatch fieldMatch) {
-        Objects.requireNonNull(cls);
-        Objects.requireNonNull(fieldMatch);
-        matches.put(cls, fieldMatch);
-        return this;
+    private DynamicFields(Builder builder) {
+        this.matches.putAll(builder.matches);
     }
 
     Map<Class<?>, FieldMatch> getMatches() {
         return matches;
     }
 
-    public static DynamicFields dynamicFields(Class<?> cls, FieldMatch fieldMatch) {
-        return new DynamicFields().and(cls, fieldMatch);
+    public final static class Builder {
+        private final Snapshot snapshot;
+        private final Map<Class<?>, FieldMatch> matches = new HashMap<>();
+
+        Builder(Snapshot snapshot) {
+            this.snapshot = snapshot;
+        }
+
+        public Builder onClass(Class<?> cls, FieldMatch fieldMatch) {
+            matches.put(cls, fieldMatch);
+            return this;
+        }
+
+        public Snapshot build() {
+            return snapshot.withDynamicFields(new DynamicFields(this));
+        }
     }
 }

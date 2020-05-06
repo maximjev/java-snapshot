@@ -4,20 +4,20 @@ import lt.vu.mif.javasnapshot.exception.SnapshotMismatchException;
 import lt.vu.mif.javasnapshot.exception.SnapshotFileException;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Stream;
 
 final class SnapshotValidator {
     private static final Set<String> SKIPPED_CLASSES = new HashSet<>();
 
+    private final Map<String, SnapshotFile> currentFiles = new HashMap<>();
     private final SnapshotSerializer serializer;
-    private final SnapshotStorage storage;
 
-    SnapshotValidator(SnapshotSerializer serializer, SnapshotStorage storage) {
+    SnapshotValidator(SnapshotSerializer serializer) {
         this.serializer = serializer;
-        this.storage = storage;
 
         SKIPPED_CLASSES.addAll(Arrays.asList(
                 Thread.class.getName(),
@@ -28,12 +28,9 @@ final class SnapshotValidator {
 
     void validate(Snapshot snapshot) {
         StackTraceElement element = findCaller();
-        String method = element.getMethodName();
-        String name = snapshot.getScenario().isPresent()
-                ? formatScenario(method, snapshot.getScenario().get())
-                : method;
+        String name = resolveSnapshotName(snapshot, element);
 
-        SnapshotFile file = storage.get(element.getClassName());
+        SnapshotFile file = getSnapshotFile(element.getClassName());
         String content = serializer.serialize(snapshot);
 
         if (file.exists(name)) {
@@ -41,6 +38,28 @@ final class SnapshotValidator {
         } else {
             file.push(name, content);
         }
+    }
+
+    private String resolveSnapshotName(Snapshot snapshot, StackTraceElement element) {
+        return snapshot.getScenario().isPresent()
+                ? formatScenario(element.getMethodName(), snapshot.getScenario().get())
+                : element.getMethodName();
+    }
+
+    private SnapshotFile getSnapshotFile(String name) {
+        if (currentFiles.containsKey(name)) {
+            return currentFiles.get(name);
+        }
+        SnapshotFile file = new SnapshotFile
+                .Builder()
+                .withPath(SnapshotConfig.getInstance().getFilePath())
+                .withExtension(SnapshotConfig.getInstance().getFileExtension())
+                .withStorageType(SnapshotConfig.getInstance().getStorageType())
+                .withName(name)
+                .build();
+
+        currentFiles.put(name, file);
+        return file;
     }
 
     private String formatScenario(String name, String scenario) {

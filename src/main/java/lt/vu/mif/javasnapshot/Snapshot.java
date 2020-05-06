@@ -24,13 +24,17 @@ public class Snapshot {
                 .validate(this);
     }
 
-    public Snapshot with(DynamicFields dynamicFields) {
-        this.dynamicFields = dynamicFields;
+    public DynamicFields.Builder withDynamicFields() {
+        return new DynamicFields.Builder(this);
+    }
+
+    public Snapshot withScenario(String scenario) {
+        this.scenario = scenario;
         return this;
     }
 
-    public Snapshot scenario(String scenario) {
-        this.scenario = scenario;
+    Snapshot withDynamicFields(DynamicFields dynamicFields) {
+        this.dynamicFields = dynamicFields;
         return this;
     }
 

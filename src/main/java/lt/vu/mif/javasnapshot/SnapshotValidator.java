@@ -3,6 +3,7 @@ package lt.vu.mif.javasnapshot;
 import lt.vu.mif.javasnapshot.exception.SnapshotMismatchException;
 import lt.vu.mif.javasnapshot.exception.SnapshotFileException;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -18,7 +19,7 @@ final class SnapshotValidator {
         this.serializer = serializer;
         this.storage = storage;
 
-        SKIPPED_CLASSES.addAll(List.of(
+        SKIPPED_CLASSES.addAll(Arrays.asList(
                 Thread.class.getName(),
                 SnapshotValidator.class.getName(),
                 Snapshot.class.getName())

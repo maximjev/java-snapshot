@@ -10,6 +10,7 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.lang.String.*;
@@ -64,13 +65,12 @@ class SnapshotFile {
 
     private Map<String, String> resolveSnapshots(Path filePath) {
         try {
-            String content = Files.readString(filePath);
+            String content = new String(Files.readAllBytes(filePath));
             return Stream.of(content.split(SNAPSHOT_SEPARATOR))
                     .map(String::trim)
                     .map(s -> s.split(ENTRY_SEPARATOR))
                     .filter(s -> s.length == 2)
-                    .map((s) -> Map.entry(s[0], s[1]))
-                    .collect(toMap(Map.Entry::getKey, Map.Entry::getValue));
+                    .collect(Collectors.toMap(s -> s[0], s -> s[1]));
         } catch (IOException e) {
             throw new SnapshotFileException(String.format("Failed to parse file %s content", fileName), e);
         }

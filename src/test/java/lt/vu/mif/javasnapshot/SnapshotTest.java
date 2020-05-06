@@ -6,8 +6,10 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Date;
 
@@ -18,7 +20,7 @@ import static lt.vu.mif.javasnapshot.FieldMatch.match;
 
 public class SnapshotTest {
 
-    private static String FILE_PATH = "src/test/java/__snapshots__";
+    private static final String FILE_PATH = "src/test/java/__snapshots__";
 
     @BeforeAll
     static void setup() {
@@ -28,12 +30,14 @@ public class SnapshotTest {
 
     @AfterAll
     static void teardown() throws IOException {
-        Files.delete(Paths.get(FILE_PATH));
+//        Files.walk(Paths.get(FILE_PATH))
+//                .map(Path::toFile)
+//                .forEach(File::deleteOnExit);
     }
 
     @Test
     void shouldMatchSnapshot() {
-        expect("lol").toMatchSnapshot();
+        expect("123").toMatchSnapshot();
     }
 
     @Test
@@ -53,6 +57,19 @@ public class SnapshotTest {
 
         expect(ref).scenario("123").with(dynamicFields(TestObject.class, match().exclude("list", "date", "sub.sub")))
                 .toMatchSnapshot();
+    }
 
+    @Test
+    void anotherOne() {
+        TestObject ref = new TestObject();
+        ref.setInt1(1);
+        ref.setDate(new Date());
+        ref.setStr1("asdssf");
+        ref.setList(asList("red", "blue", "green"));
+        ref.setStringArray(new String[]{"apple", "banana"});
+        ref.setSub(new TestSubobject("subvalue", new TestSubobject("subsubvalue")));
+
+        expect(ref).with(dynamicFields(TestObject.class, match().exclude("list", "date", "sub.sub")))
+                .toMatchSnapshot();
     }
 }

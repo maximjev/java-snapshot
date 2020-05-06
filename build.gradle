@@ -5,7 +5,7 @@ plugins {
 group 'lt.vu.mif'
 version '1.0-SNAPSHOT'
 
-sourceCompatibility = 11
+sourceCompatibility = 1.8
 
 repositories {
     mavenCentral()
@@ -15,7 +15,6 @@ dependencies {
     compile group: 'com.monitorjbl', name: 'json-view', version: '1.0.1'
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.11.0'
     compile group: 'com.google.guava', name: 'guava', version: '29.0-jre'
-// https://mvnrepository.com/artifact/org.outerj.daisy/daisydiff
 
     testCompile 'org.junit.jupiter:junit-jupiter-api:5.4.2'
 }

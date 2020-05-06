@@ -47,6 +47,7 @@ public class Snapshot {
     }
 
     public static Snapshot expect(Object object, Object... others) {
+        Objects.requireNonNull(object);
         return new Snapshot(concat(object, others));
     }
 }

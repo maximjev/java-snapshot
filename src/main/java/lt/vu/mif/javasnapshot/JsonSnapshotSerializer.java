@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 
-class JsonSnapshotSerializer implements SnapshotSerializer {
+final class JsonSnapshotSerializer implements SnapshotSerializer {
 
     private final ObjectMapper mapper;
     private final PrettyPrinter prettyPrinter;
@@ -30,7 +30,7 @@ class JsonSnapshotSerializer implements SnapshotSerializer {
         }
     }
 
-    private JsonView buildView(Snapshot snapshot) {
+    private JsonView<?> buildView(Snapshot snapshot) {
         return Stream
                 .of(JsonView.with(snapshot.getObject()))
                 .map(view -> dynamicFields(snapshot, view))
@@ -38,14 +38,13 @@ class JsonSnapshotSerializer implements SnapshotSerializer {
                 .orElseThrow(() -> new SerializationException("Failed to serialize snapshot"));
     }
 
-    private JsonView dynamicFields(Snapshot snapshot, JsonView view) {
+    private JsonView<?> dynamicFields(Snapshot snapshot, JsonView<?> view) {
         return snapshot.getDynamicFields().isPresent()
                 ? resolveMatches(snapshot, view)
                 : view;
     }
 
-    @SuppressWarnings("unchecked")
-    private JsonView resolveMatches(Snapshot snapshot, JsonView view) {
+    private JsonView<?> resolveMatches(Snapshot snapshot, JsonView<?> view) {
         Map<Class<?>, FieldMatch> matches = snapshot.getDynamicFields().get().getMatches();
         if (!matches.isEmpty()) {
             matches.forEach((c, m) -> view.onClass(c, toViewMatch(m)));
@@ -55,8 +54,8 @@ class JsonSnapshotSerializer implements SnapshotSerializer {
 
     private Match toViewMatch(FieldMatch fieldMatch) {
         return Match.match()
-                .exclude(fieldMatch.getExcludes().toArray(String[]::new))
-                .include(fieldMatch.getIncludes().toArray(String[]::new));
+                .exclude(fieldMatch.getExcludes().toArray(new String[0]))
+                .include(fieldMatch.getIncludes().toArray(new String[0]));
     }
 
     @Override

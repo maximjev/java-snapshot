@@ -2,9 +2,8 @@ package lt.vu.mif.javasnapshot;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
-public class DynamicFields {
+final class DynamicFields {
     private final Map<Class<?>, FieldMatch> matches = new HashMap<>();
 
     private DynamicFields(Builder builder) {

@@ -3,10 +3,6 @@ package lt.vu.mif.javasnapshot;
 
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.collect.ImmutableMap;
-import lt.vu.mif.javasnapshot.Snapshot;
-import lt.vu.mif.javasnapshot.SnapshotConfig;
-import lt.vu.mif.javasnapshot.JsonSnapshotSerializer;
 import lt.vu.mif.javasnapshot.model.NonReplaceableKeyMap;
 import lt.vu.mif.javasnapshot.model.TestObject;
 import lt.vu.mif.javasnapshot.model.TestSubobject;
@@ -15,11 +11,11 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import static java.util.Arrays.asList;
-import static lt.vu.mif.javasnapshot.DynamicFields.*;
 import static lt.vu.mif.javasnapshot.FieldMatch.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -31,7 +27,7 @@ public class JsonSnapshotSerializerTest {
 
     @BeforeEach
     void setup() {
-        mapper = SnapshotConfig.getInstance().getObjectMapper();
+        mapper = SnapshotConfiguration.getInstance().getObjectMapper();
         serializer = new JsonSnapshotSerializer(mapper, new DefaultPrettyPrinter());
     }
 
@@ -164,10 +160,10 @@ public class JsonSnapshotSerializerTest {
     void shouldExcludeSubobjectMapFields() throws IOException {
         TestObject ref = new TestObject();
         ref.setInt1(1);
-        ref.setMapOfObjects(ImmutableMap.of(
-                "key1", new TestSubobject("test1"),
-                "key2", new TestSubobject("test2", new TestSubobject("test3"))
-        ));
+        Map<String, TestSubobject> mapOfObjects = new HashMap<>();
+        mapOfObjects.put("key1", new TestSubobject("test1"));
+        mapOfObjects.put("key2", new TestSubobject("test2", new TestSubobject("test3")));
+        ref.setMapOfObjects(mapOfObjects);
 
         Snapshot snapshot = Snapshot.expect(ref)
                 .withDynamicFields()

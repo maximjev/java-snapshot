@@ -52,9 +52,9 @@ final class SnapshotValidator {
         }
         SnapshotFile file = new SnapshotFile
                 .Builder()
-                .withPath(SnapshotConfig.getInstance().getFilePath())
-                .withExtension(SnapshotConfig.getInstance().getFileExtension())
-                .withStorageType(SnapshotConfig.getInstance().getStorageType())
+                .withPath(SnapshotConfiguration.getInstance().getFilePath())
+                .withExtension(SnapshotConfiguration.getInstance().getFileExtension())
+                .withStorageType(SnapshotConfiguration.getInstance().getStorageType())
                 .withName(name)
                 .build();
 

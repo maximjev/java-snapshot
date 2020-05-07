@@ -1,10 +1,8 @@
-package lt.vu.mif.javasnapshot.dd;
+package lt.vu.mif.javasnapshot.snapshot;
 
-import lt.vu.mif.javasnapshot.Snapshot;
-import lt.vu.mif.javasnapshot.SnapshotConfig;
+import lt.vu.mif.javasnapshot.SnapshotConfiguration;
 import lt.vu.mif.javasnapshot.model.TestObject;
 import lt.vu.mif.javasnapshot.model.TestSubobject;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -27,8 +25,9 @@ public class SnapshotTest {
 
     @BeforeAll
     static void setup() {
-        SnapshotConfig.getInstance()
-                .withFilePath(FILE_PATH);
+        new SnapshotConfiguration.Builder()
+                .withFilePath(FILE_PATH)
+                .build();
     }
 
 //    @AfterAll

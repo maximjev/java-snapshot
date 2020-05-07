@@ -1,10 +1,8 @@
 package lt.vu.mif.javasnapshot;
 
-
 import java.util.Objects;
 import java.util.Optional;
 
-import static com.google.common.collect.ObjectArrays.*;
 import static java.util.Optional.*;
 
 
@@ -19,8 +17,8 @@ public class Snapshot {
     }
 
     public void toMatchSnapshot() {
-        SnapshotConfig.getInstance()
-                .snapshotValidator()
+        SnapshotConfiguration.getInstance()
+                .getSnapshotValidator()
                 .validate(this);
     }
 
@@ -53,5 +51,12 @@ public class Snapshot {
     public static Snapshot expect(Object object, Object... others) {
         Objects.requireNonNull(object);
         return new Snapshot(concat(object, others));
+    }
+
+    private static Object concat(Object object, Object... others) {
+        Object[] result = new Object[others.length + 1];
+        result[0] = object;
+        System.arraycopy(others, 0, result, 1, others.length);
+        return result;
     }
 }

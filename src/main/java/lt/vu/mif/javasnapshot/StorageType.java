@@ -1,5 +1,5 @@
 package lt.vu.mif.javasnapshot;
 
 public enum StorageType {
-    FLAT_DIRECTORY, PACKAGE_HIERARCHY
+    FLAT_DIRECTORY, BY_PACKAGE_HIERARCHY
 }

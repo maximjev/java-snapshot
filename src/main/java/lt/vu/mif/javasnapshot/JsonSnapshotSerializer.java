@@ -40,12 +40,11 @@ final class JsonSnapshotSerializer implements SnapshotSerializer {
 
     private JsonView<?> dynamicFields(Snapshot snapshot, JsonView<?> view) {
         return snapshot.getDynamicFields().isPresent()
-                ? resolveMatches(snapshot, view)
+                ? resolveMatches(snapshot.getDynamicFields().get().getMatches(), view)
                 : view;
     }
 
-    private JsonView<?> resolveMatches(Snapshot snapshot, JsonView<?> view) {
-        Map<Class<?>, FieldMatch> matches = snapshot.getDynamicFields().get().getMatches();
+    private JsonView<?> resolveMatches(Map<Class<?>, FieldMatch> matches, JsonView<?> view) {
         if (!matches.isEmpty()) {
             matches.forEach((c, m) -> view.onClass(c, toViewMatch(m)));
         }

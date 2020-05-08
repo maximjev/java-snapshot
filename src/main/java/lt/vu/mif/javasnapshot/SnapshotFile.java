@@ -14,12 +14,11 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.lang.String.*;
-import static java.util.stream.Collectors.*;
 
 class SnapshotFile {
-    private static final String SNAPSHOT_SEPARATOR = "\n\n\n";
-    private static final String ENTRY_SEPARATOR = "=";
-    private static final String DOT_SEPARATOR = "%s.%s";
+    public static final String SNAPSHOT_SEPARATOR = "\n\n\n";
+    public static final String ENTRY_SEPARATOR = "=";
+    public static final String DOT_SEPARATOR = "%s.%s";
 
     private final String fileName;
     private final String snapshotPrefix;
@@ -88,15 +87,15 @@ class SnapshotFile {
                 .orElse("");
     }
 
-    public void push(String methodName, String content) {
+    void push(String methodName, String content) {
         snapshots.put(format(methodName), content);
     }
 
-    public boolean exists(String methodName) {
+    boolean exists(String methodName) {
         return snapshots.containsKey(format(methodName));
     }
 
-    public String get(String methodName) {
+    String get(String methodName) {
         return snapshots.get(format(methodName));
     }
 

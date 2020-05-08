@@ -10,6 +10,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Stream;
 
+import static java.util.Arrays.*;
+
 final class SnapshotValidator {
     private static final Set<String> SKIPPED_CLASSES = new HashSet<>();
 
@@ -19,7 +21,7 @@ final class SnapshotValidator {
     SnapshotValidator(SnapshotSerializer serializer) {
         this.serializer = serializer;
 
-        SKIPPED_CLASSES.addAll(Arrays.asList(
+        SKIPPED_CLASSES.addAll(asList(
                 Thread.class.getName(),
                 SnapshotValidator.class.getName(),
                 Snapshot.class.getName())

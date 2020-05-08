@@ -17,7 +17,6 @@ public final class SnapshotConfiguration {
     private final ObjectMapper objectMapper;
     private final PrettyPrinter prettyPrinter;
 
-    private final SnapshotSerializer snapshotSerializer;
     private final SnapshotValidator validator;
 
     private SnapshotConfiguration(Builder builder) {
@@ -30,8 +29,7 @@ public final class SnapshotConfiguration {
         this.objectMapper = builder.objectMapper;
         this.prettyPrinter = builder.prettyPrinter;
 
-        this.snapshotSerializer = new JsonSnapshotSerializer(objectMapper, prettyPrinter);
-        this.validator = new SnapshotValidator(snapshotSerializer);
+        this.validator = new SnapshotValidator(new JsonSnapshotSerializer(objectMapper, prettyPrinter));
 
         INSTANCE = this;
     }

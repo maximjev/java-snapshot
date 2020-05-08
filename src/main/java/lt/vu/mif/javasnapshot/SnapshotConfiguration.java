@@ -5,14 +5,17 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.monitorjbl.json.JsonViewModule;
 import com.monitorjbl.json.JsonViewSerializer;
 
+import java.util.Objects;
+
 public final class SnapshotConfiguration {
     private static SnapshotConfiguration INSTANCE;
 
     private final String filePath;
     private final String fileExtension;
-
     private final StorageType storageType;
-    private final SerializerType serializerType;
+
+    private final boolean compatibility;
+
 
     private final ObjectMapper objectMapper;
     private final PrettyPrinter prettyPrinter;
@@ -22,12 +25,12 @@ public final class SnapshotConfiguration {
     private SnapshotConfiguration(Builder builder) {
         this.filePath = builder.filePath;
         this.fileExtension = builder.fileExtension;
-
         this.storageType = builder.storageType;
-        this.serializerType = builder.serializerType;
 
         this.objectMapper = builder.objectMapper;
         this.prettyPrinter = builder.prettyPrinter;
+
+        this.compatibility = builder.compatibility;
 
         this.validator = new SnapshotValidator(new JsonSnapshotSerializer(objectMapper, prettyPrinter));
 
@@ -61,10 +64,6 @@ public final class SnapshotConfiguration {
         return storageType;
     }
 
-    public SerializerType getSerializerType() {
-        return serializerType;
-    }
-
     public String getFilePath() {
         return filePath;
     }
@@ -73,16 +72,19 @@ public final class SnapshotConfiguration {
         return fileExtension;
     }
 
+    public boolean isCompatibility() {
+        return compatibility;
+    }
+
     public static final class Builder {
         private String filePath = "src/test/java";
-        private String fileExtension = "snap";
+        private String fileExtension = "json";
+        private boolean compatibility = false;
 
         private StorageType storageType = StorageType.FLAT_DIRECTORY;
-        private SerializerType serializerType = SerializerType.JSON;
 
         private ObjectMapper objectMapper;
         private PrettyPrinter prettyPrinter;
-
 
         public Builder() {
         }
@@ -102,11 +104,6 @@ public final class SnapshotConfiguration {
             return this;
         }
 
-        public Builder withSerializerType(SerializerType serializerType) {
-            this.serializerType = serializerType;
-            return this;
-        }
-
         public Builder withObjectMapper(ObjectMapper objectMapper) {
             this.objectMapper = objectMapper;
             return this;
@@ -117,16 +114,28 @@ public final class SnapshotConfiguration {
             return this;
         }
 
+        public Builder withJsonSnapshotCompatibility() {
+            this.compatibility = true;
+            return this;
+        }
+
         public SnapshotConfiguration build() {
+            Objects.requireNonNull(filePath);
+            Objects.requireNonNull(fileExtension);
+            Objects.requireNonNull(storageType);
+
             final Defaults defaults = getDefaults();
 
             if (objectMapper == null) {
                 objectMapper = defaults.objectMapper();
-            } else {
-                objectMapper.registerModule(new JsonViewModule(new JsonViewSerializer()));
             }
+            objectMapper.registerModule(new JsonViewModule(new JsonViewSerializer()));
+
             if (prettyPrinter == null) {
                 prettyPrinter = defaults.prettyPrinter();
+            }
+            if (compatibility) {
+                this.fileExtension = "snap";
             }
 
             return new SnapshotConfiguration(this);

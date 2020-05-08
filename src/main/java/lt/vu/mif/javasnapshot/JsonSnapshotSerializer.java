@@ -56,9 +56,4 @@ final class JsonSnapshotSerializer implements SnapshotSerializer {
                 .exclude(fieldMatch.getExcludes().toArray(new String[0]))
                 .include(fieldMatch.getIncludes().toArray(new String[0]));
     }
-
-    @Override
-    public SerializerType getType() {
-        return SerializerType.JSON;
-    }
 }

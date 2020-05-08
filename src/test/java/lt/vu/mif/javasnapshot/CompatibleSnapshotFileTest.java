@@ -1,9 +1,7 @@
 package lt.vu.mif.javasnapshot;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lt.vu.mif.javasnapshot.SnapshotConfiguration;
 import lt.vu.mif.javasnapshot.model.NonReplaceableKeyMap;
 import lt.vu.mif.javasnapshot.model.TestObject;
 import lt.vu.mif.javasnapshot.model.TestSubobject;
@@ -11,7 +9,6 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -21,14 +18,16 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.util.Arrays.asList;
+import static lt.vu.mif.javasnapshot.CompatibleSnapshotFile.ENTRY_SEPARATOR;
+import static lt.vu.mif.javasnapshot.CompatibleSnapshotFile.SNAPSHOT_SEPARATOR;
 import static lt.vu.mif.javasnapshot.Snapshot.expect;
 import static lt.vu.mif.javasnapshot.FieldMatch.match;
-import static lt.vu.mif.javasnapshot.SnapshotFile.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SuppressWarnings("unchecked")
-public class SnapshotTest {
+public class CompatibleSnapshotFileTest {
     private static final String FILE_PATH = "src/test/java/__snapshots__";
+    private static final String FILE_EXTENSION = "snap";
     private static SnapshotConfiguration configuration;
     private static ObjectMapper mapper;
 
@@ -36,6 +35,8 @@ public class SnapshotTest {
     static void setup() {
         configuration = new SnapshotConfiguration.Builder()
                 .withFilePath(FILE_PATH)
+                .withFileExtension(FILE_EXTENSION)
+                .withJsonSnapshotCompatibility()
                 .build();
         mapper = configuration.getObjectMapper();
     }
@@ -50,7 +51,7 @@ public class SnapshotTest {
 
     Map<String, String> resolveSnapshots() {
         try {
-            String fileName = String.format(DOT_SEPARATOR, this.getClass().getSimpleName(), configuration.getFileExtension());
+            String fileName = String.format("%s.%s", this.getClass().getSimpleName(), configuration.getFileExtension());
             Path path = Paths.get(configuration.getFilePath(), fileName);
             byte[] bytes = Files.readAllBytes(path);
             return Stream.of(new String(bytes).split(SNAPSHOT_SEPARATOR))
@@ -64,7 +65,7 @@ public class SnapshotTest {
     }
 
     @Test
-    void shouldMatchStringSnapshot() throws JsonProcessingException, InterruptedException {
+    void shouldMatchStringSnapshot() throws JsonProcessingException {
         String expected = "expected";
 
         expect(expected).toMatchSnapshot();

@@ -1,0 +1,67 @@
+lt.vu.mif.javasnapshot.CompatibleSnapshotFileTest.shouldCreateScenariosForParameterizedTests[third]=[
+  "expected"
+]
+
+
+lt.vu.mif.javasnapshot.CompatibleSnapshotFileTest.shouldCreateScenariosForParameterizedTests[second]=[
+  "expected"
+]
+
+
+lt.vu.mif.javasnapshot.CompatibleSnapshotFileTest.shouldExcludeDynamicFields=[
+  {
+    "sub": {
+      "val": "subvalue"
+    },
+    "str1": "asdssf",
+    "int1": 1,
+    "stringArray": [
+      "apple",
+      "banana"
+    ],
+    "staticValue": "TEST"
+  }
+]
+
+
+lt.vu.mif.javasnapshot.CompatibleSnapshotFileTest.shouldCreateScenariosForParameterizedTests[first]=[
+  "expected"
+]
+
+
+lt.vu.mif.javasnapshot.CompatibleSnapshotFileTest.shouldExcludeWildCard=[
+  { }
+]
+
+
+lt.vu.mif.javasnapshot.CompatibleSnapshotFileTest.shouldResolveFirstCallerMethod=[
+  "expected"
+]
+
+
+lt.vu.mif.javasnapshot.CompatibleSnapshotFileTest.shouldMatchStringSnapshot=[
+  "expected"
+]
+
+
+lt.vu.mif.javasnapshot.CompatibleSnapshotFileTest.shouldCreateSnapshotWithScenario[scenario]=[
+  "expected"
+]
+
+
+lt.vu.mif.javasnapshot.CompatibleSnapshotFileTest.shouldIncludeFields=[
+  {
+    "str1": "aaaasdsssf",
+    "int1": 1,
+    "list": [
+      "red",
+      "blue",
+      "green"
+    ]
+  }
+]
+
+
+lt.vu.mif.javasnapshot.CompatibleSnapshotFileTest.shouldCreateScenariosForParameterizedTests[fourth]=[
+  "expected"
+]

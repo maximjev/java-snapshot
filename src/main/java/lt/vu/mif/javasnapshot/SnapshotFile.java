@@ -13,17 +13,27 @@ abstract class SnapshotFile {
     private final Path filePath;
 
     SnapshotFile(Builder builder) {
-        this.fileName = resolveFileName(builder.name);
-        this.filePath = Paths.get(builder.configuration.getFilePath(),
-                String.format("%s.%s", fileName, builder.configuration.getFileExtension()));
+        SnapshotConfiguration config = builder.configuration;
+        this.fileName = resolveFileName(builder.name, config.getFileExtension());
+        if (config.getStorageType().equals(StorageType.BY_PACKAGE_HIERARCHY)) {
+            this.filePath = constructPackagePath(config.getFilePath(), builder.name);
+        } else {
+            this.filePath = Paths.get(config.getFilePath(), fileName);
+        }
     }
 
-    private String resolveFileName(String className) {
+    private Path constructPackagePath(String filePath, String name) {
+        String[] packagePath = name.split("\\.");
+        packagePath[packagePath.length - 1] = fileName;
+        return Paths.get(filePath, packagePath);
+    }
+
+    private String resolveFileName(String className, String extension) {
         String[] tokens = className.split("\\.");
         if (tokens.length == 0) {
             return className;
         }
-        return tokens[tokens.length - 1];
+        return String.format("%s.%s", tokens[tokens.length - 1], extension);
     }
 
     SnapshotFile init() {

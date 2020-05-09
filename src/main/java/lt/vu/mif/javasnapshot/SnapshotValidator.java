@@ -27,6 +27,11 @@ final class SnapshotValidator {
         }
     }
 
+    void validateInline(Snapshot snapshot, String inline) {
+        String serialized = serializer.serialize(snapshot);
+        compare(inline.trim(), serialized.trim());
+    }
+
     private SnapshotFile getSnapshotFile(String className) {
         if (currentFiles.containsKey(className)) {
             return currentFiles.get(className);

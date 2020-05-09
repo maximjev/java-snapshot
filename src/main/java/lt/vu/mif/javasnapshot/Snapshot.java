@@ -71,6 +71,13 @@ public final class Snapshot {
                 .validate(this);
     }
 
+    public void toMatchInlineSnapshot(String inline) {
+        Objects.requireNonNull(inline);
+        SnapshotConfiguration.getInstance()
+                .getSnapshotValidator()
+                .validateInline(this, inline);
+    }
+
     Snapshot withDynamicFields(DynamicFields dynamicFields) {
         this.dynamicFields = dynamicFields;
         return this;

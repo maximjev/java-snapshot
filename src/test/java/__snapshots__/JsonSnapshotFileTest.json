@@ -1,55 +1,58 @@
 {
+  "lt.vu.mif.javasnapshot.JsonSnapshotFileTest.shouldThrowMismatchException": [
+    "expected"
+  ],
   "lt.vu.mif.javasnapshot.JsonSnapshotFileTest.shouldCreateScenariosForParameterizedTests": {
-    "first": [
+    "third": [
       "expected"
     ],
     "fourth": [
       "expected"
     ],
-    "second": [
+    "first": [
       "expected"
     ],
-    "third": [
+    "second": [
       "expected"
     ]
   },
+  "lt.vu.mif.javasnapshot.JsonSnapshotFileTest.shouldResolveFirstCallerMethod": [
+    "expected"
+  ],
+  "lt.vu.mif.javasnapshot.JsonSnapshotFileTest.shouldExcludeDynamicFields": [
+    {
+      "sub": {
+        "val": "subvalue"
+      },
+      "str1": "asdssf",
+      "int1": 1,
+      "stringArray": [
+        "apple",
+        "banana"
+      ],
+      "staticValue": "TEST"
+    }
+  ],
   "lt.vu.mif.javasnapshot.JsonSnapshotFileTest.shouldCreateSnapshotWithScenario": {
     "scenario": [
       "expected"
     ]
   },
-  "lt.vu.mif.javasnapshot.JsonSnapshotFileTest.shouldExcludeDynamicFields": [
-    {
-      "int1": 1,
-      "staticValue": "TEST",
-      "str1": "asdssf",
-      "stringArray": [
-        "apple",
-        "banana"
-      ],
-      "sub": {
-        "val": "subvalue"
-      }
-    }
-  ],
   "lt.vu.mif.javasnapshot.JsonSnapshotFileTest.shouldExcludeWildCard": [
     { }
   ],
+  "lt.vu.mif.javasnapshot.JsonSnapshotFileTest.shouldMatchStringSnapshot": [
+    "expected"
+  ],
   "lt.vu.mif.javasnapshot.JsonSnapshotFileTest.shouldIncludeFields": [
     {
+      "str1": "aaaasdsssf",
       "int1": 1,
       "list": [
         "red",
         "blue",
         "green"
-      ],
-      "str1": "aaaasdsssf"
+      ]
     }
-  ],
-  "lt.vu.mif.javasnapshot.JsonSnapshotFileTest.shouldMatchStringSnapshot": [
-    "expected"
-  ],
-  "lt.vu.mif.javasnapshot.JsonSnapshotFileTest.shouldResolveFirstCallerMethod": [
-    "expected"
   ]
 }

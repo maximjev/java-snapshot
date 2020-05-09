@@ -1,7 +1,9 @@
 package lt.vu.mif.javasnapshot;
 
 import com.fasterxml.jackson.core.PrettyPrinter;
+import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.monitorjbl.json.JsonViewModule;
 import com.monitorjbl.json.JsonViewSerializer;
 
@@ -135,7 +137,9 @@ public final class SnapshotConfiguration {
                 prettyPrinter = defaults.prettyPrinter();
             }
             if (compatibility) {
+                this.storageType = StorageType.FLAT_DIRECTORY;
                 this.fileExtension = "snap";
+                this.objectMapper.configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true);
             }
 
             return new SnapshotConfiguration(this);

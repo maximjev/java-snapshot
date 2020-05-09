@@ -29,18 +29,21 @@ final class JsonSnapshotFile extends SnapshotFile {
     }
 
     @SuppressWarnings("unchecked")
-    protected void parseSnapshots(String content) {
+    protected void loadSnapshots(String content) {
         if (content.isEmpty()) {
             return;
         }
-        this.snapshots.putAll(structure((Map<String, Object>) read(content), ParseType.WRITE));
+        Map<String, Object> fileContent = (Map<String, Object>) read(content);
+        Object structured = structure(fileContent, ParseType.WRITE);
+        this.snapshots.putAll((Map<String, Object>) structured);
     }
 
     protected String saveSnapshots() {
-        return write(structure(snapshots, ParseType.READ));
+        Object structured = structure(snapshots, ParseType.READ);
+        return write(structured);
     }
 
-    private Map<String, Object> structure(Map<String, Object> snapshots, ParseType parseType) {
+    private Object structure(Map<String, Object> snapshots, ParseType parseType) {
         return snapshots.entrySet()
                 .stream()
                 .collect(toMap(
@@ -72,8 +75,8 @@ final class JsonSnapshotFile extends SnapshotFile {
     }
 
     protected boolean exists(Snapshot snapshot) {
-        if (!snapshots.containsKey(format(snapshot)) || !snapshot.getScenario().isPresent()) {
-            return false;
+        if (snapshots.containsKey(format(snapshot)) && !snapshot.getScenario().isPresent()) {
+            return true;
         }
         Map<String, Object> scenarios = getScenarios(snapshot);
         return scenarios != null && scenarios.containsKey(snapshot.getScenario().get());

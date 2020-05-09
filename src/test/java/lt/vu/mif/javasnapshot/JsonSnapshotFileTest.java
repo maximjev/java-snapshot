@@ -1,6 +1,7 @@
 package lt.vu.mif.javasnapshot;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lt.vu.mif.javasnapshot.exception.SnapshotMismatchException;
 import lt.vu.mif.javasnapshot.model.TestObject;
 import lt.vu.mif.javasnapshot.model.TestSubobject;
 import org.junit.jupiter.api.Assertions;
@@ -76,6 +77,13 @@ public class JsonSnapshotFileTest {
     void shouldThrowExceptionOnNull() {
         Assertions.assertThrows(NullPointerException.class,
                 () -> expect(null).toMatchSnapshot()
+        );
+    }
+
+    @Test
+    void shouldThrowMismatchException() {
+        Assertions.assertThrows(SnapshotMismatchException.class,
+                () -> expect("not expected").toMatchSnapshot()
         );
     }
 

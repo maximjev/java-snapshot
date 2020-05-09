@@ -1,10 +1,13 @@
 package lt.vu.mif.javasnapshot;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.PrettyPrinter;
 import com.fasterxml.jackson.core.util.DefaultIndenter;
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.core.util.Separators;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.monitorjbl.json.JsonViewModule;
@@ -17,11 +20,19 @@ final class Defaults {
     }
 
     ObjectMapper objectMapper() {
-        return new ObjectMapper()
+        ObjectMapper mapper = new ObjectMapper();
+        return mapper
                 .registerModule(new JsonViewModule(new JsonViewSerializer()))
-                .configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true)
+                .configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true)
                 .setSerializationInclusion(JsonInclude.Include.NON_NULL)
-                .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+                .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+                .setVisibility(mapper
+                        .getSerializationConfig()
+                        .getDefaultVisibilityChecker()
+                        .withFieldVisibility(JsonAutoDetect.Visibility.ANY)
+                        .withGetterVisibility(JsonAutoDetect.Visibility.NONE)
+                        .withSetterVisibility(JsonAutoDetect.Visibility.NONE)
+                        .withCreatorVisibility(JsonAutoDetect.Visibility.NONE));
     }
 
     PrettyPrinter prettyPrinter() {

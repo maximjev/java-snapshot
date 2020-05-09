@@ -42,7 +42,7 @@ abstract class SnapshotFile {
             create(file);
         }
         try {
-            parseSnapshots(new String(Files.readAllBytes(filePath)));
+            loadSnapshots(new String(Files.readAllBytes(filePath)));
         } catch (IOException e) {
             throw new SnapshotFileException(String.format("Failed to parse file %s content", fileName), e);
         }
@@ -61,7 +61,7 @@ abstract class SnapshotFile {
         }));
     }
 
-    protected abstract void parseSnapshots(String fileContent);
+    protected abstract void loadSnapshots(String fileContent);
 
     protected abstract String saveSnapshots();
 

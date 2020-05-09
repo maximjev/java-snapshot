@@ -17,7 +17,7 @@ final class CompatibleSnapshotFile extends SnapshotFile {
         super(builder);
     }
 
-    protected void parseSnapshots(String content) {
+    protected void loadSnapshots(String content) {
         this.snapshots = (Stream.of(content.split(SNAPSHOT_SEPARATOR))
                 .map(String::trim)
                 .map(s -> s.split(ENTRY_SEPARATOR))

@@ -40,7 +40,7 @@ Default Snapshot file directory is `src/test/java`, but can be overridden
 1. It is then your job to decide if you have introduced a regression or intentionally changed the output
 1. If you have introduced a regression you will need to fix your code
 1. If you have intentionally changed the output you can manually modify Snapshot file, to make it pass or delete it and it will be generated again from scratch
-
+1. Snapshot files should be committed along with test classes.
 
 # Usage Examples
 ## Basic usage

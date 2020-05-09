@@ -12,6 +12,7 @@ public final class SnapshotConfiguration {
 
     private final String filePath;
     private final String fileExtension;
+
     private final StorageType storageType;
 
     private final boolean compatibility;
@@ -25,13 +26,13 @@ public final class SnapshotConfiguration {
         this.filePath = builder.filePath;
         this.fileExtension = builder.fileExtension;
         this.storageType = builder.storageType;
+        this.compatibility = builder.compatibility;
 
         this.objectMapper = builder.objectMapper;
         this.prettyPrinter = builder.prettyPrinter;
 
-        this.compatibility = builder.compatibility;
-
-        this.validator = new SnapshotValidator(new JsonSnapshotSerializer(objectMapper, prettyPrinter));
+        SnapshotSerializer snapshotSerializer = new JsonSnapshotSerializer(objectMapper, prettyPrinter);
+        this.validator = new SnapshotValidator(snapshotSerializer);
 
         INSTANCE = this;
     }

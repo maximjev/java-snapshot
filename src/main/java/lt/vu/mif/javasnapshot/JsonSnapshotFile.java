@@ -6,12 +6,17 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lt.vu.mif.javasnapshot.exception.SnapshotFileException;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import static java.util.stream.Collectors.*;
+
 
 final class JsonSnapshotFile extends SnapshotFile {
+    private enum ParseType {
+        WRITE, READ
+    }
+
     private final ObjectMapper mapper;
     private final PrettyPrinter printer;
 
@@ -28,24 +33,41 @@ final class JsonSnapshotFile extends SnapshotFile {
         if (content.isEmpty()) {
             return;
         }
-
-        this.snapshots.putAll((LinkedHashMap<String, Object>) getObject(content));
+        this.snapshots.putAll(structure((Map<String, Object>) read(content), ParseType.WRITE));
     }
 
     protected String saveSnapshots() {
-        return writeObject(this.snapshots);
+        return write(structure(snapshots, ParseType.READ));
+    }
+
+    private Map<String, Object> structure(Map<String, Object> snapshots, ParseType parseType) {
+        return snapshots.entrySet()
+                .stream()
+                .collect(toMap(
+                        Map.Entry::getKey,
+                        v -> parseObject(v.getValue(), parseType)
+                ));
+    }
+
+    @SuppressWarnings("unchecked")
+    private Object parseObject(Object object, ParseType parseType) {
+        if (object instanceof Map) {
+            return structure((Map<String, Object>) object, parseType);
+        }
+        return ParseType.READ.equals(parseType)
+                ? read((String) object)
+                : write(object);
     }
 
     protected void push(Snapshot snapshot, String content) {
-        Object obj = getObject(content);
         if (snapshot.getScenario().isPresent()) {
             if (!snapshots.containsKey(format(snapshot))) {
-                snapshots.put(format(snapshot), new HashMap<String, Object>());
+                snapshots.put(format(snapshot), new LinkedHashMap<>());
             }
             Map<String, Object> scenarios = getScenarios(snapshot);
-            scenarios.put(snapshot.getScenario().get(), obj);
+            scenarios.put(snapshot.getScenario().get(), content);
         } else {
-            snapshots.put(format(snapshot), obj);
+            snapshots.put(format(snapshot), content);
         }
     }
 
@@ -60,28 +82,28 @@ final class JsonSnapshotFile extends SnapshotFile {
     protected String get(Snapshot snapshot) {
         if (snapshot.getScenario().isPresent()) {
             Map<String, Object> scenarios = getScenarios(snapshot);
-            return writeObject(scenarios.get(snapshot.getScenario().get()));
+            return (String) scenarios.get(snapshot.getScenario().get());
         }
-        return writeObject(snapshots.get(format(snapshot)));
+        return (String) snapshots.get(format(snapshot));
     }
 
     private String format(Snapshot snapshot) {
         return String.format("%s.%s", snapshot.getClassName(), snapshot.getMethodName());
     }
 
-    private Object getObject(String content) {
+    private Object read(String content) {
         try {
             return mapper.readValue(content, Object.class);
         } catch (IOException e) {
-            throw new SnapshotFileException(String.format("Failed to parse snapshot %s", content), e);
+            throw new SnapshotFileException(String.format("Failed to read snapshot %s", content), e);
         }
     }
 
-    private String writeObject(Object obj) {
+    private String write(Object obj) {
         try {
             return mapper.writer(printer).writeValueAsString(obj);
         } catch (JsonProcessingException e) {
-            throw new SnapshotFileException(String.format("Failed to parse snapshot %s", obj), e);
+            throw new SnapshotFileException(String.format("Failed to write snapshot %s", obj), e);
         }
     }
 

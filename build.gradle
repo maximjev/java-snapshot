@@ -5,6 +5,10 @@ plugins {
 group 'lt.vu.mif'
 version '1.0-SNAPSHOT'
 
+test {
+    useJUnitPlatform()
+}
+
 sourceCompatibility = 1.8
 
 repositories {

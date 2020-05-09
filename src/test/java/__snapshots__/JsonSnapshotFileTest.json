@@ -19,6 +19,9 @@
   "lt.vu.mif.javasnapshot.JsonSnapshotFileTest.shouldResolveFirstCallerMethod": [
     "expected"
   ],
+  "lt.vu.mif.javasnapshot.JsonSnapshotFileTest.shouldUpdateSnapshot": [
+    "expected"
+  ],
   "lt.vu.mif.javasnapshot.JsonSnapshotFileTest.shouldExcludeDynamicFields": [
     {
       "sub": {

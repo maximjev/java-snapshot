@@ -3,6 +3,11 @@ lt.vu.mif.javasnapshot.CompatibleSnapshotFileTest.shouldCreateScenariosForParame
 ]
 
 
+lt.vu.mif.javasnapshot.CompatibleSnapshotFileTest.shouldUpdateSnapshot=[
+  "expected"
+]
+
+
 lt.vu.mif.javasnapshot.CompatibleSnapshotFileTest.shouldCreateScenariosForParameterizedTests[second]=[
   "expected"
 ]

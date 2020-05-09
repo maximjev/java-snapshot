@@ -9,7 +9,7 @@ import java.util.Set;
 import java.util.stream.Stream;
 
 import static java.util.Arrays.asList;
-import static java.util.Optional.*;
+import static java.util.Optional.ofNullable;
 
 
 public final class Snapshot {
@@ -17,6 +17,8 @@ public final class Snapshot {
             Thread.class.getName(),
             Snapshot.class.getName())
     );
+
+    private final SnapshotValidator validator;
 
     private final String methodName;
     private final String className;
@@ -26,8 +28,10 @@ public final class Snapshot {
     private DynamicFields dynamicFields;
 
     private Snapshot(Object object, Object... others) {
-        this.object = concat(object, others);
         StackTraceElement element = findCaller();
+        this.validator = SnapshotConfiguration.getInstance()
+                .getSnapshotValidator();
+        this.object = concat(object, others);
         this.methodName = element.getMethodName();
         this.className = element.getClassName();
     }
@@ -66,16 +70,16 @@ public final class Snapshot {
     }
 
     public void toMatchSnapshot() {
-        SnapshotConfiguration.getInstance()
-                .getSnapshotValidator()
-                .validate(this);
+        validator.validate(this);
     }
 
     public void toMatchInlineSnapshot(String inline) {
         Objects.requireNonNull(inline);
-        SnapshotConfiguration.getInstance()
-                .getSnapshotValidator()
-                .validateInline(this, inline);
+        validator.validateInline(this, inline);
+    }
+
+    public void toUpdate() {
+        validator.update(this);
     }
 
     Snapshot withDynamicFields(DynamicFields dynamicFields) {

@@ -5,7 +5,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lt.vu.mif.javasnapshot.model.NonReplaceableKeyMap;
 import lt.vu.mif.javasnapshot.model.TestObject;
 import lt.vu.mif.javasnapshot.model.TestSubobject;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
@@ -20,8 +22,8 @@ import java.util.stream.Stream;
 import static java.util.Arrays.asList;
 import static lt.vu.mif.javasnapshot.CompatibleSnapshotFile.ENTRY_SEPARATOR;
 import static lt.vu.mif.javasnapshot.CompatibleSnapshotFile.SNAPSHOT_SEPARATOR;
-import static lt.vu.mif.javasnapshot.Snapshot.expect;
 import static lt.vu.mif.javasnapshot.FieldMatch.match;
+import static lt.vu.mif.javasnapshot.Snapshot.expect;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SuppressWarnings("unchecked")
@@ -65,13 +67,25 @@ public class CompatibleSnapshotFileTest {
     }
 
     @Test
+    void shouldUpdateSnapshot() throws JsonProcessingException {
+        String expected = "expected";
+        expect(expected).toUpdate();
+
+        String snapshot = findSnapshot("shouldUpdateSnapshot");
+        List<Object> list = Arrays.asList((Object[]) mapper.readValue(snapshot, String[].class));
+
+        Assertions.assertEquals(list.size(), 1);
+        Assertions.assertEquals(expected, list.get(0));
+    }
+
+    @Test
     void shouldMatchStringSnapshot() throws JsonProcessingException {
         String expected = "expected";
 
         expect(expected).toMatchSnapshot();
 
         String snapshot = findSnapshot("shouldMatchStringSnapshot");
-        List<Object> list = Arrays.asList(mapper.readValue(snapshot, String[].class));
+        List<Object> list = Arrays.asList((Object[]) mapper.readValue(snapshot, String[].class));
 
         Assertions.assertEquals(list.size(), 1);
         Assertions.assertEquals(expected, list.get(0));
@@ -94,7 +108,7 @@ public class CompatibleSnapshotFileTest {
         expect(expected).toMatchSnapshot();
 
         String snapshot = findSnapshot("shouldResolveFirstCallerMethod");
-        List<Object> list = Arrays.asList(mapper.readValue(snapshot, String[].class));
+        List<Object> list = Arrays.asList((Object[]) mapper.readValue(snapshot, String[].class));
 
         Assertions.assertEquals(list.size(), 1);
         Assertions.assertEquals(list.get(0), expected);
@@ -106,7 +120,7 @@ public class CompatibleSnapshotFileTest {
         expect(expected).withScenario("scenario").toMatchSnapshot();
 
         String snapshot = findSnapshot("shouldResolveFirstCallerMethod");
-        List<Object> list = Arrays.asList(mapper.readValue(snapshot, String[].class));
+        List<Object> list = Arrays.asList((Object[]) mapper.readValue(snapshot, String[].class));
 
         Assertions.assertEquals(list.size(), 1);
         Assertions.assertEquals(list.get(0), expected);
@@ -124,7 +138,7 @@ public class CompatibleSnapshotFileTest {
         expect(expected).withScenario(scenario).toMatchSnapshot();
 
         String snapshot = findSnapshot("shouldCreateScenariosForParameterizedTests", scenario);
-        List<Object> list = Arrays.asList(mapper.readValue(snapshot, String[].class));
+        List<Object> list = Arrays.asList((Object[]) mapper.readValue(snapshot, String[].class));
 
         Assertions.assertEquals(list.size(), 1);
         Assertions.assertEquals(list.get(0), expected);

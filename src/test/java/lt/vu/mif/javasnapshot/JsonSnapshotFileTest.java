@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -21,10 +20,9 @@ import static java.util.Arrays.asList;
 import static lt.vu.mif.javasnapshot.FieldMatch.match;
 import static lt.vu.mif.javasnapshot.Snapshot.expect;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SuppressWarnings("unchecked")
-public class JsonSnapshotFileTest {
+class JsonSnapshotFileTest {
 
     private static final String FILE_PATH = "src/test/java/__snapshots__";
     private static SnapshotConfiguration configuration;
@@ -40,12 +38,16 @@ public class JsonSnapshotFileTest {
 
     @SuppressWarnings("unchecked")
     List<Object> findSnapshot(String methodName, String scenario) {
-        return (List<Object>) ((LinkedHashMap<String, Object>) resolveSnapshots().get(String.format("%s.%s", getClass().getName(), methodName))).get(scenario);
+        return (List<Object>) ((LinkedHashMap<String, Object>) resolveSnapshots().get(format(methodName))).get(scenario);
     }
 
     @SuppressWarnings("unchecked")
     List<Object> findSnapshot(String methodName) {
-        return (List<Object>) resolveSnapshots().get(String.format("%s.%s", getClass().getName(), methodName));
+        return (List<Object>) resolveSnapshots().get(format(methodName));
+    }
+
+    private String format(String methodName) {
+        return String.format("%s.%s", getClass().getName(), methodName);
     }
 
     @SuppressWarnings("unchecked")
@@ -59,6 +61,17 @@ public class JsonSnapshotFileTest {
         } catch (IOException ignored) {
             return new LinkedHashMap<>();
         }
+    }
+
+    @Test
+    void shouldUpdateSnapshot() {
+        String expected = "expected";
+        expect(expected).toUpdate();
+
+        List<Object> list = findSnapshot("shouldUpdateSnapshot");
+
+        Assertions.assertEquals(list.size(), 1);
+        Assertions.assertEquals(expected, list.get(0));
     }
 
     @Test

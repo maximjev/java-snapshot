@@ -1,7 +1,6 @@
 package lt.vu.mif.javasnapshot;
 
 import com.fasterxml.jackson.core.PrettyPrinter;
-import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.monitorjbl.json.JsonViewModule;
@@ -10,6 +9,8 @@ import com.monitorjbl.json.JsonViewSerializer;
 import java.util.Objects;
 
 public final class SnapshotConfiguration {
+    static String JVM_UPDATE_SNAPSHOTS_PARAMETER = "updateSnapshot";
+
     private static SnapshotConfiguration INSTANCE;
 
     private final String filePath;

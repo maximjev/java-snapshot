@@ -1,9 +1,9 @@
-package com.github.javasnapshot;
+package com.github.maximjev;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.PrettyPrinter;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.javasnapshot.exception.SnapshotFileException;
+import com.github.maximjev.exception.SnapshotFileException;
 
 import java.io.IOException;
 import java.util.LinkedHashMap;

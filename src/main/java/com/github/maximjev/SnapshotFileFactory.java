@@ -1,4 +1,4 @@
-package com.github.javasnapshot;
+package com.github.maximjev;
 
 final class SnapshotFileFactory {
     SnapshotFile create(String className) {

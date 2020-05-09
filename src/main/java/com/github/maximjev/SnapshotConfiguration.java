@@ -1,4 +1,4 @@
-package com.github.javasnapshot;
+package com.github.maximjev;
 
 import com.fasterxml.jackson.core.PrettyPrinter;
 import com.fasterxml.jackson.databind.ObjectMapper;

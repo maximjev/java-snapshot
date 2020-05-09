@@ -1,4 +1,4 @@
-package com.github.javasnapshot;
+package com.github.maximjev;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonInclude;

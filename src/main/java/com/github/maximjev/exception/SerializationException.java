@@ -1,4 +1,4 @@
-package com.github.javasnapshot.exception;
+package com.github.maximjev.exception;
 
 public class SerializationException extends RuntimeException {
     public SerializationException(String message) {

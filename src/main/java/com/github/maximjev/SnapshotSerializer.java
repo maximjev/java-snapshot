@@ -1,4 +1,4 @@
-package com.github.javasnapshot;
+package com.github.maximjev;
 
 interface SnapshotSerializer {
     String serialize(Snapshot snapshot);

@@ -1,6 +1,6 @@
-package com.github.javasnapshot;
+package com.github.maximjev;
 
-import com.github.javasnapshot.exception.SnapshotFileException;
+import com.github.maximjev.exception.SnapshotFileException;
 
 import java.io.File;
 import java.io.IOException;

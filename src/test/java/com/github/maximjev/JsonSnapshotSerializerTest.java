@@ -1,11 +1,11 @@
-package com.github.javasnapshot;
+package com.github.maximjev;
 
 
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.javasnapshot.model.NonReplaceableKeyMap;
-import com.github.javasnapshot.model.TestObject;
-import com.github.javasnapshot.model.TestSubobject;
+import com.github.maximjev.model.NonReplaceableKeyMap;
+import com.github.maximjev.model.TestObject;
+import com.github.maximjev.model.TestSubobject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

@@ -1,4 +1,4 @@
-package com.github.javasnapshot;
+package com.github.maximjev;
 
 import java.util.HashMap;
 import java.util.Map;

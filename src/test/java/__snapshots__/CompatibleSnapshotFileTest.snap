@@ -1,34 +1,37 @@
-com.github.javasnapshot.CompatibleSnapshotFileTest.shouldExcludeWildCard=[
+com.github.maximjev.CompatibleSnapshotFileTest.shouldIncludeFields=[
+  {
+    "str1": "aaaasdsssf",
+    "int1": 1,
+    "list": [
+      "red",
+      "blue",
+      "green"
+    ]
+  }
+]
+
+
+com.github.maximjev.CompatibleSnapshotFileTest.shouldExcludeWildCard=[
   { }
 ]
 
 
-com.github.javasnapshot.CompatibleSnapshotFileTest.shouldResolveFirstCallerMethod=[
+com.github.maximjev.CompatibleSnapshotFileTest.shouldCreateScenariosForParameterizedTests[third]=[
   "expected"
 ]
 
 
-com.github.javasnapshot.CompatibleSnapshotFileTest.shouldUpdateSnapshot=[
+com.github.maximjev.CompatibleSnapshotFileTest.shouldCreateScenariosForParameterizedTests[fourth]=[
   "expected"
 ]
 
 
-com.github.javasnapshot.CompatibleSnapshotFileTest.shouldCreateSnapshotWithScenario[scenario]=[
+com.github.maximjev.CompatibleSnapshotFileTest.shouldCreateScenariosForParameterizedTests[second]=[
   "expected"
 ]
 
 
-com.github.javasnapshot.CompatibleSnapshotFileTest.shouldCreateScenariosForParameterizedTests[second]=[
-  "expected"
-]
-
-
-com.github.javasnapshot.CompatibleSnapshotFileTest.shouldCreateScenariosForParameterizedTests[third]=[
-  "expected"
-]
-
-
-com.github.javasnapshot.CompatibleSnapshotFileTest.shouldExcludeDynamicFields=[
+com.github.maximjev.CompatibleSnapshotFileTest.shouldExcludeDynamicFields=[
   {
     "sub": {
       "val": "subvalue"
@@ -44,29 +47,26 @@ com.github.javasnapshot.CompatibleSnapshotFileTest.shouldExcludeDynamicFields=[
 ]
 
 
-com.github.javasnapshot.CompatibleSnapshotFileTest.shouldMatchStringSnapshot=[
+com.github.maximjev.CompatibleSnapshotFileTest.shouldCreateSnapshotWithScenario[scenario]=[
   "expected"
 ]
 
 
-com.github.javasnapshot.CompatibleSnapshotFileTest.shouldIncludeFields=[
-  {
-    "str1": "aaaasdsssf",
-    "int1": 1,
-    "list": [
-      "red",
-      "blue",
-      "green"
-    ]
-  }
-]
-
-
-com.github.javasnapshot.CompatibleSnapshotFileTest.shouldCreateScenariosForParameterizedTests[fourth]=[
+com.github.maximjev.CompatibleSnapshotFileTest.shouldResolveFirstCallerMethod=[
   "expected"
 ]
 
 
-com.github.javasnapshot.CompatibleSnapshotFileTest.shouldCreateScenariosForParameterizedTests[first]=[
+com.github.maximjev.CompatibleSnapshotFileTest.shouldCreateScenariosForParameterizedTests[first]=[
+  "expected"
+]
+
+
+com.github.maximjev.CompatibleSnapshotFileTest.shouldMatchStringSnapshot=[
+  "expected"
+]
+
+
+com.github.maximjev.CompatibleSnapshotFileTest.shouldUpdateSnapshot=[
   "expected"
 ]

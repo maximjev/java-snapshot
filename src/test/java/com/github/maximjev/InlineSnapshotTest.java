@@ -1,7 +1,7 @@
-package com.github.javasnapshot;
+package com.github.maximjev;
 
-import com.github.javasnapshot.model.TestObject;
-import com.github.javasnapshot.model.TestSubobject;
+import com.github.maximjev.model.TestObject;
+import com.github.maximjev.model.TestSubobject;
 import org.junit.jupiter.api.Test;
 
 import java.util.Date;

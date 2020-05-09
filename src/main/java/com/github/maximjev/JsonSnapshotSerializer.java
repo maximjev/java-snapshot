@@ -1,9 +1,9 @@
-package com.github.javasnapshot;
+package com.github.maximjev;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.PrettyPrinter;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.javasnapshot.exception.SerializationException;
+import com.github.maximjev.exception.SerializationException;
 import com.monitorjbl.json.JsonView;
 import com.monitorjbl.json.Match;
 

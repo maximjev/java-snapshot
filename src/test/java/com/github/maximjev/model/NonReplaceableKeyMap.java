@@ -1,4 +1,4 @@
-package com.github.javasnapshot.model;
+package com.github.maximjev.model;
 
 import java.util.LinkedHashMap;
 

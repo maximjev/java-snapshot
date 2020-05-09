@@ -1,25 +1,5 @@
 {
-  "com.github.javasnapshot.JsonSnapshotFileTest.shouldIncludeFields": [
-    {
-      "str1": "aaaasdsssf",
-      "int1": 1,
-      "list": [
-        "red",
-        "blue",
-        "green"
-      ]
-    }
-  ],
-  "com.github.javasnapshot.JsonSnapshotFileTest.shouldUpdateSnapshot": [
-    "expected"
-  ],
-  "com.github.javasnapshot.JsonSnapshotFileTest.shouldMatchStringSnapshot": [
-    "expected"
-  ],
-  "com.github.javasnapshot.JsonSnapshotFileTest.shouldThrowMismatchException": [
-    "expected"
-  ],
-  "com.github.javasnapshot.JsonSnapshotFileTest.shouldExcludeDynamicFields": [
+  "com.github.maximjev.JsonSnapshotFileTest.shouldExcludeDynamicFields": [
     {
       "sub": {
         "val": "subvalue"
@@ -33,7 +13,16 @@
       "staticValue": "TEST"
     }
   ],
-  "com.github.javasnapshot.JsonSnapshotFileTest.shouldCreateScenariosForParameterizedTests": {
+  "com.github.maximjev.JsonSnapshotFileTest.shouldResolveFirstCallerMethod": [
+    "expected"
+  ],
+  "com.github.maximjev.JsonSnapshotFileTest.shouldMatchStringSnapshot": [
+    "expected"
+  ],
+  "com.github.maximjev.JsonSnapshotFileTest.shouldExcludeWildCard": [
+    { }
+  ],
+  "com.github.maximjev.JsonSnapshotFileTest.shouldCreateScenariosForParameterizedTests": {
     "third": [
       "expected"
     ],
@@ -47,15 +36,26 @@
       "expected"
     ]
   },
-  "com.github.javasnapshot.JsonSnapshotFileTest.shouldResolveFirstCallerMethod": [
+  "com.github.maximjev.JsonSnapshotFileTest.shouldThrowMismatchException": [
     "expected"
   ],
-  "com.github.javasnapshot.JsonSnapshotFileTest.shouldCreateSnapshotWithScenario": {
+  "com.github.maximjev.JsonSnapshotFileTest.shouldIncludeFields": [
+    {
+      "str1": "aaaasdsssf",
+      "int1": 1,
+      "list": [
+        "red",
+        "blue",
+        "green"
+      ]
+    }
+  ],
+  "com.github.maximjev.JsonSnapshotFileTest.shouldUpdateSnapshot": [
+    "expected"
+  ],
+  "com.github.maximjev.JsonSnapshotFileTest.shouldCreateSnapshotWithScenario": {
     "scenario": [
       "expected"
     ]
-  },
-  "com.github.javasnapshot.JsonSnapshotFileTest.shouldExcludeWildCard": [
-    { }
-  ]
+  }
 }

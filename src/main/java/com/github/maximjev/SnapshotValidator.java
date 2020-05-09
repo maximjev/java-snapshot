@@ -1,6 +1,6 @@
-package com.github.javasnapshot;
+package com.github.maximjev;
 
-import com.github.javasnapshot.exception.SnapshotMismatchException;
+import com.github.maximjev.exception.SnapshotMismatchException;
 
 import java.util.LinkedHashMap;
 import java.util.Map;

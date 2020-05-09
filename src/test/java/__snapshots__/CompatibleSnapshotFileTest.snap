@@ -1,19 +1,34 @@
-lt.vu.mif.javasnapshot.CompatibleSnapshotFileTest.shouldCreateScenariosForParameterizedTests[third]=[
+com.github.javasnapshot.CompatibleSnapshotFileTest.shouldExcludeWildCard=[
+  { }
+]
+
+
+com.github.javasnapshot.CompatibleSnapshotFileTest.shouldResolveFirstCallerMethod=[
   "expected"
 ]
 
 
-lt.vu.mif.javasnapshot.CompatibleSnapshotFileTest.shouldUpdateSnapshot=[
+com.github.javasnapshot.CompatibleSnapshotFileTest.shouldUpdateSnapshot=[
   "expected"
 ]
 
 
-lt.vu.mif.javasnapshot.CompatibleSnapshotFileTest.shouldCreateScenariosForParameterizedTests[second]=[
+com.github.javasnapshot.CompatibleSnapshotFileTest.shouldCreateSnapshotWithScenario[scenario]=[
   "expected"
 ]
 
 
-lt.vu.mif.javasnapshot.CompatibleSnapshotFileTest.shouldExcludeDynamicFields=[
+com.github.javasnapshot.CompatibleSnapshotFileTest.shouldCreateScenariosForParameterizedTests[second]=[
+  "expected"
+]
+
+
+com.github.javasnapshot.CompatibleSnapshotFileTest.shouldCreateScenariosForParameterizedTests[third]=[
+  "expected"
+]
+
+
+com.github.javasnapshot.CompatibleSnapshotFileTest.shouldExcludeDynamicFields=[
   {
     "sub": {
       "val": "subvalue"
@@ -29,37 +44,12 @@ lt.vu.mif.javasnapshot.CompatibleSnapshotFileTest.shouldExcludeDynamicFields=[
 ]
 
 
-lt.vu.mif.javasnapshot.CompatibleSnapshotFileTest.shouldCreateScenariosForParameterizedTests[first]=[
+com.github.javasnapshot.CompatibleSnapshotFileTest.shouldMatchStringSnapshot=[
   "expected"
 ]
 
 
-lt.vu.mif.javasnapshot.CompatibleSnapshotFileTest.shouldResolveFirstCallerMethod=[
-  "expected"
-]
-
-
-lt.vu.mif.javasnapshot.CompatibleSnapshotFileTest.shouldExcludeWildCard=[
-  { }
-]
-
-
-lt.vu.mif.javasnapshot.CompatibleSnapshotFileTest.shouldMatchStringSnapshot=[
-  "expected"
-]
-
-
-lt.vu.mif.javasnapshot.CompatibleSnapshotFileTest.shouldCreateSnapshotWithScenario[scenario]=[
-  "expected"
-]
-
-
-lt.vu.mif.javasnapshot.CompatibleSnapshotFileTest.shouldCreateScenariosForParameterizedTests[fourth]=[
-  "expected"
-]
-
-
-lt.vu.mif.javasnapshot.CompatibleSnapshotFileTest.shouldIncludeFields=[
+com.github.javasnapshot.CompatibleSnapshotFileTest.shouldIncludeFields=[
   {
     "str1": "aaaasdsssf",
     "int1": 1,
@@ -69,4 +59,14 @@ lt.vu.mif.javasnapshot.CompatibleSnapshotFileTest.shouldIncludeFields=[
       "green"
     ]
   }
+]
+
+
+com.github.javasnapshot.CompatibleSnapshotFileTest.shouldCreateScenariosForParameterizedTests[fourth]=[
+  "expected"
+]
+
+
+com.github.javasnapshot.CompatibleSnapshotFileTest.shouldCreateScenariosForParameterizedTests[first]=[
+  "expected"
 ]

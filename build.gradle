@@ -2,7 +2,7 @@ plugins {
     id 'java'
 }
 
-group 'lt.vu.mif'
+group 'com.github'
 version '1.0-SNAPSHOT'
 
 test {

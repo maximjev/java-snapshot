@@ -1,28 +1,25 @@
 {
-  "lt.vu.mif.javasnapshot.JsonSnapshotFileTest.shouldThrowMismatchException": [
+  "com.github.javasnapshot.JsonSnapshotFileTest.shouldIncludeFields": [
+    {
+      "str1": "aaaasdsssf",
+      "int1": 1,
+      "list": [
+        "red",
+        "blue",
+        "green"
+      ]
+    }
+  ],
+  "com.github.javasnapshot.JsonSnapshotFileTest.shouldUpdateSnapshot": [
     "expected"
   ],
-  "lt.vu.mif.javasnapshot.JsonSnapshotFileTest.shouldCreateScenariosForParameterizedTests": {
-    "third": [
-      "expected"
-    ],
-    "fourth": [
-      "expected"
-    ],
-    "first": [
-      "expected"
-    ],
-    "second": [
-      "expected"
-    ]
-  },
-  "lt.vu.mif.javasnapshot.JsonSnapshotFileTest.shouldResolveFirstCallerMethod": [
+  "com.github.javasnapshot.JsonSnapshotFileTest.shouldMatchStringSnapshot": [
     "expected"
   ],
-  "lt.vu.mif.javasnapshot.JsonSnapshotFileTest.shouldUpdateSnapshot": [
+  "com.github.javasnapshot.JsonSnapshotFileTest.shouldThrowMismatchException": [
     "expected"
   ],
-  "lt.vu.mif.javasnapshot.JsonSnapshotFileTest.shouldExcludeDynamicFields": [
+  "com.github.javasnapshot.JsonSnapshotFileTest.shouldExcludeDynamicFields": [
     {
       "sub": {
         "val": "subvalue"
@@ -36,26 +33,29 @@
       "staticValue": "TEST"
     }
   ],
-  "lt.vu.mif.javasnapshot.JsonSnapshotFileTest.shouldCreateSnapshotWithScenario": {
+  "com.github.javasnapshot.JsonSnapshotFileTest.shouldCreateScenariosForParameterizedTests": {
+    "third": [
+      "expected"
+    ],
+    "fourth": [
+      "expected"
+    ],
+    "first": [
+      "expected"
+    ],
+    "second": [
+      "expected"
+    ]
+  },
+  "com.github.javasnapshot.JsonSnapshotFileTest.shouldResolveFirstCallerMethod": [
+    "expected"
+  ],
+  "com.github.javasnapshot.JsonSnapshotFileTest.shouldCreateSnapshotWithScenario": {
     "scenario": [
       "expected"
     ]
   },
-  "lt.vu.mif.javasnapshot.JsonSnapshotFileTest.shouldExcludeWildCard": [
+  "com.github.javasnapshot.JsonSnapshotFileTest.shouldExcludeWildCard": [
     { }
-  ],
-  "lt.vu.mif.javasnapshot.JsonSnapshotFileTest.shouldMatchStringSnapshot": [
-    "expected"
-  ],
-  "lt.vu.mif.javasnapshot.JsonSnapshotFileTest.shouldIncludeFields": [
-    {
-      "str1": "aaaasdsssf",
-      "int1": 1,
-      "list": [
-        "red",
-        "blue",
-        "green"
-      ]
-    }
   ]
 }

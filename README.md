@@ -41,36 +41,8 @@ Default Snapshot file directory is `src/test/java`, but can be overridden
 1. If you have introduced a regression you will need to fix your code
 1. If you have intentionally changed the output you can manually modify Snapshot file, to make it pass or delete it and it will be generated again from scratch
 
-## What is a Snapshot
-A text (usually json) representation of your java object.
-
-As an example
-```text
-com.example.ExampleTest.shouldExtractArgsFromFakeMethodWithComplexObject=[
-  {
-    "FakeObject.fakeMethodWithComplexObject": [
-      {
-        "arg0": {
-          "id": "idMock"
-        }
-      }
-    ]
-  },
-  {
-    "FakeObject.fakeMethodWithComplexObject": [
-      {
-        "arg0": {
-          "id": "idMock",
-          "name": "nameMock"
-        }
-      }
-    ]
-  }
-]
-```
 
 # Usage Examples
-
 ## Basic usage
 
 `expected` method accepts any types of arguments.
@@ -141,7 +113,7 @@ class JavaSnapshotTest {
 The snapshot for this test would look like this:
 
 ```json
-"lt.vu.mif.javasnapshot.JsonSnapshotFileTest.testWithExclusion": [
+"JsonSnapshotFileTest.testWithExclusion": [
     {
       "sub": {
         "val": "subvalue"
@@ -183,7 +155,7 @@ class JavaSnapshotTest {
 The snapshot for this test would look like this:
 
 ```json
-"lt.vu.mif.javasnapshot.JsonSnapshotFileTest.testWithInclusion": [
+"JsonSnapshotFileTest.testWithInclusion": [
     {
       "str1": "str1",
       "int1": 1,

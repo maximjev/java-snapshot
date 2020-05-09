@@ -2,11 +2,11 @@ package lt.vu.mif.javasnapshot;
 
 import lt.vu.mif.javasnapshot.exception.SnapshotMismatchException;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 final class SnapshotValidator {
-    private final Map<String, SnapshotFile> currentFiles = new HashMap<>();
+    private final Map<String, SnapshotFile> currentFiles = new LinkedHashMap<>();
     private final SnapshotSerializer serializer;
 
     private final SnapshotFileFactory snapshotFileFactory;
@@ -17,13 +17,13 @@ final class SnapshotValidator {
     }
 
     void validate(Snapshot snapshot) {
-        String actual = serializer.serialize(snapshot);
+        String serialized = serializer.serialize(snapshot);
         SnapshotFile file = getSnapshotFile(snapshot.getClassName());
 
         if (file.exists(snapshot)) {
-            compare(file.get(snapshot), actual);
+            compare(file.get(snapshot), serialized);
         } else {
-            file.push(snapshot, actual);
+            file.push(snapshot, serialized);
         }
     }
 

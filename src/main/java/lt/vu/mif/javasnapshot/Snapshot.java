@@ -12,7 +12,7 @@ import static java.util.Arrays.asList;
 import static java.util.Optional.*;
 
 
-public class Snapshot {
+public final class Snapshot {
     private static final Set<String> SKIPPED = new HashSet<>(asList(
             Thread.class.getName(),
             Snapshot.class.getName())
@@ -25,12 +25,18 @@ public class Snapshot {
     private String scenario;
     private DynamicFields dynamicFields;
 
-    private Snapshot(Object object) {
-        Objects.requireNonNull(object);
+    private Snapshot(Object object, Object... others) {
+        this.object = concat(object, others);
         StackTraceElement element = findCaller();
         this.methodName = element.getMethodName();
         this.className = element.getClassName();
-        this.object = object;
+    }
+
+    private Object concat(Object object, Object... others) {
+        Object[] result = new Object[others.length + 1];
+        result[0] = object;
+        System.arraycopy(others, 0, result, 1, others.length);
+        return result;
     }
 
     private StackTraceElement findCaller() {
@@ -45,28 +51,28 @@ public class Snapshot {
                 .orElse(lastCaller);
     }
 
-    public void toMatchSnapshot() {
-        SnapshotConfiguration.getInstance()
-                .getSnapshotValidator()
-                .validate(this);
-    }
-
     public static Snapshot expect(Object object, Object... others) {
         Objects.requireNonNull(object);
-        return new Snapshot(concat(object, others));
+        return new Snapshot(object, others);
     }
 
     public DynamicFields.Builder withDynamicFields() {
         return new DynamicFields.Builder(this);
     }
 
-    Snapshot withDynamicFields(DynamicFields dynamicFields) {
-        this.dynamicFields = dynamicFields;
+    public Snapshot withScenario(String scenario) {
+        this.scenario = scenario;
         return this;
     }
 
-    public Snapshot withScenario(String scenario) {
-        this.scenario = scenario;
+    public void toMatchSnapshot() {
+        SnapshotConfiguration.getInstance()
+                .getSnapshotValidator()
+                .validate(this);
+    }
+
+    Snapshot withDynamicFields(DynamicFields dynamicFields) {
+        this.dynamicFields = dynamicFields;
         return this;
     }
 
@@ -88,12 +94,5 @@ public class Snapshot {
 
     Optional<DynamicFields> getDynamicFields() {
         return ofNullable(dynamicFields);
-    }
-
-    private static Object concat(Object object, Object... others) {
-        Object[] result = new Object[others.length + 1];
-        result[0] = object;
-        System.arraycopy(others, 0, result, 1, others.length);
-        return result;
     }
 }

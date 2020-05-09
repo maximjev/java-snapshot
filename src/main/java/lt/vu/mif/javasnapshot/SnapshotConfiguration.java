@@ -16,7 +16,6 @@ public final class SnapshotConfiguration {
 
     private final boolean compatibility;
 
-
     private final ObjectMapper objectMapper;
     private final PrettyPrinter prettyPrinter;
 
@@ -52,27 +51,27 @@ public final class SnapshotConfiguration {
         return validator;
     }
 
-    public PrettyPrinter getPrettyPrinter() {
+    PrettyPrinter getPrettyPrinter() {
         return prettyPrinter;
     }
 
-    public ObjectMapper getObjectMapper() {
+    ObjectMapper getObjectMapper() {
         return objectMapper;
     }
 
-    public StorageType getStorageType() {
+    StorageType getStorageType() {
         return storageType;
     }
 
-    public String getFilePath() {
+    String getFilePath() {
         return filePath;
     }
 
-    public String getFileExtension() {
+    String getFileExtension() {
         return fileExtension;
     }
 
-    public boolean isCompatibility() {
+    boolean isCompatibility() {
         return compatibility;
     }
 

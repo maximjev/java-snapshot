@@ -22,6 +22,7 @@ import static lt.vu.mif.javasnapshot.Snapshot.expect;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@SuppressWarnings("unchecked")
 public class JsonSnapshotFileTest {
 
     private static final String FILE_PATH = "src/test/java/__snapshots__";

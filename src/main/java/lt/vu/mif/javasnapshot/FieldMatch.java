@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-public class FieldMatch {
+public final class FieldMatch {
     private final Set<String> includes = new HashSet<>();
     private final Set<String> excludes = new HashSet<>();
 

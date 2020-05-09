@@ -14,9 +14,7 @@ public class InlineSnapshotTest {
     @Test
     void shouldMatchInlineStringSnapshot() {
         String expected = "expected";
-        expect(expected).toMatchInlineSnapshot("[\n" +
-                "  \"expected\"\n" +
-                "]");
+        expect(expected).toMatchInlineSnapshot("[\n  \"expected\"\n]");
     }
 
     @Test

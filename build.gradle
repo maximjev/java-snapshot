@@ -1,9 +1,11 @@
 plugins {
     id 'java'
+    id 'net.researchgate.release' version '2.8.1'
+    id 'com.github.johnrengelman.shadow' version '5.2.0'
 }
 
-group 'com.github'
-version '1.0-SNAPSHOT'
+group 'com.github.maximjev'
+version '1.0.0-SNAPSHOT'
 
 test {
     useJUnitPlatform()
@@ -13,6 +15,12 @@ sourceCompatibility = 1.8
 
 repositories {
     mavenCentral()
+}
+
+shadowJar {
+    classifier = ''
+    relocate 'com.monitorjbl.json-view', 'shadow.com.monitorjbl.json-view'
+    relocate 'com.fasterxml.jackson.core', 'shadow.com.fasterxml.jackson.core'
 }
 
 dependencies {

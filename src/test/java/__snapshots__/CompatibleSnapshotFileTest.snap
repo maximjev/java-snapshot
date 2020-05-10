@@ -57,12 +57,12 @@ com.github.maximjev.CompatibleSnapshotFileTest.shouldResolveFirstCallerMethod=[
 ]
 
 
-com.github.maximjev.CompatibleSnapshotFileTest.shouldCreateScenariosForParameterizedTests[first]=[
+com.github.maximjev.CompatibleSnapshotFileTest.shouldMatchStringSnapshot=[
   "expected"
 ]
 
 
-com.github.maximjev.CompatibleSnapshotFileTest.shouldMatchStringSnapshot=[
+com.github.maximjev.CompatibleSnapshotFileTest.shouldCreateScenariosForParameterizedTests[first]=[
   "expected"
 ]
 

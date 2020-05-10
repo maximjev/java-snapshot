@@ -7,10 +7,6 @@ plugins {
 group 'com.github.maximjev'
 version '1.0.0-SNAPSHOT'
 
-test {
-    useJUnitPlatform()
-}
-
 sourceCompatibility = 1.8
 
 repositories {
@@ -18,15 +14,14 @@ repositories {
 }
 
 shadowJar {
-    classifier = ''
     relocate 'com.monitorjbl.json-view', 'shadow.com.monitorjbl.json-view'
-    relocate 'com.fasterxml.jackson.core', 'shadow.com.fasterxml.jackson.core'
+    relocate 'com.fasterxml.jackson', 'shadow.com.fasterxml.jackson'
 }
 
 dependencies {
-    compile group: 'com.monitorjbl', name: 'json-view', version: '1.0.1'
-    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.11.0'
+    compile 'com.monitorjbl:json-view:1.0.1'
+    compile 'com.fasterxml.jackson.core:jackson-databind:2.11.0'
 
-    testCompile 'org.junit.jupiter:junit-jupiter-api:5.4.2'
-    testCompile "org.junit.jupiter:junit-jupiter-params:5.4.2"
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.4.2'
+    testImplementation "org.junit.jupiter:junit-jupiter-params:5.4.2"
 }

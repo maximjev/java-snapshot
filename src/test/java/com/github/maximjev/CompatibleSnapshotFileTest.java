@@ -7,6 +7,7 @@ import com.github.maximjev.model.TestObject;
 import com.github.maximjev.model.TestSubobject;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -22,6 +23,7 @@ import java.util.stream.Stream;
 import static java.util.Arrays.asList;
 import static org.junit.jupiter.api.Assertions.*;
 
+@Disabled
 @SuppressWarnings("unchecked")
 public class CompatibleSnapshotFileTest {
     private static final String FILE_PATH = "src/test/java/__snapshots__";

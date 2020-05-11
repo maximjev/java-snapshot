@@ -56,7 +56,6 @@ artifacts {
 
 test {
     useJUnitPlatform()
-    systemProperty 'updateSnapshot', findProperty('pattern')
 }
 
 if (project.hasProperty("signing.keyId")) {

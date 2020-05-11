@@ -243,6 +243,18 @@ Instead of deleting or manually modifying each snapshot you can pass `-PupdateSn
 
 This will update all snapshots containing the text passed as the value.
 
+For gradle it can be done via `build.gradle` file the way shown bellow.
+
+```gradle
+test {
+    useJUnitPlatform()
+    systemProperty 'updateSnapshot', findProperty('pattern')
+}
+```
+
+
+
+
 Also, updating individual tests could be achieved by using `update` method, as in provided example:
 
 ```java

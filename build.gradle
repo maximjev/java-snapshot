@@ -36,5 +36,84 @@ dependencies {
     compile 'com.fasterxml.jackson.core:jackson-databind:2.11.0'
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.4.2'
-    testImplementation "org.junit.jupiter:junit-jupiter-params:5.4.2"
+    testImplementation 'org.junit.jupiter:junit-jupiter-params:5.4.2'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.4.2'
+}
+
+task javadocJar(type: Jar) {
+    archiveClassifier.set('javadoc')
+    from javadoc
+}
+
+task sourcesJar(type: Jar) {
+    archiveClassifier.set('sources')
+    from sourceSets.main.allSource
+}
+
+artifacts {
+    archives javadocJar, sourcesJar
+}
+
+test {
+    useJUnitPlatform()
+    systemProperty 'updateSnapshot', findProperty('pattern')
+}
+
+if (project.hasProperty("signing.keyId")) {
+    apply plugin: 'signing'
+    signing {
+        sign configurations.archives
+    }
+
+    signArchives.dependsOn 'shadowJar'
+}
+
+if (project.hasProperty("ossrhUsername") && project.hasProperty("ossrhPassword")) {
+    apply plugin: 'maven'
+
+    uploadArchives {
+        repositories {
+            mavenDeployer {
+                beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+                repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+                    authentication(userName: ossrhUsername, password: ossrhPassword)
+                }
+
+                snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+                    authentication(userName: ossrhUsername, password: ossrhPassword)
+                }
+
+                pom.project {
+                    name 'java-snapshot'
+                    packaging 'jar'
+                    description 'Snapshot Testing for Java'
+                    url 'https://github.com/maximjev/java-snapshot'
+                    scm {
+                        connection 'scm:git:https://github.com/maximjev/java-snapshot'
+                        url 'https://github.com/maximjev/java-snapshot'
+                    }
+
+                    licenses {
+                        license {
+                            name 'MIT License'
+                            url 'http://www.opensource.org/licenses/mit-license.php'
+                        }
+                    }
+
+                    developers {
+                        developer {
+                            id 'maximjev'
+                            name 'Maksim Prokofjev'
+                            email 'ma.prokofjev@gmail.com'
+                        }
+                    }
+                }
+
+                pom.whenConfigured {
+                    p -> p.dependencies = []
+                }
+            }
+        }
+    }
 }

@@ -86,6 +86,8 @@ if (project.hasProperty("ossrhUsername") && project.hasProperty("ossrhPassword")
                 pom.project {
                     name 'java-snapshot'
                     packaging 'jar'
+                    artifactId archivesBaseName
+                    version version
                     description 'Snapshot Testing for Java'
                     url 'https://github.com/maximjev/java-snapshot'
                     scm {

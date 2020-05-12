@@ -16,7 +16,7 @@ final class JsonSnapshotSerializer implements SnapshotSerializer {
     private final ObjectMapper mapper;
     private final PrettyPrinter prettyPrinter;
 
-    public JsonSnapshotSerializer(ObjectMapper mapper, PrettyPrinter prettyPrinter) {
+    JsonSnapshotSerializer(ObjectMapper mapper, PrettyPrinter prettyPrinter) {
         this.mapper = mapper;
         this.prettyPrinter = prettyPrinter;
     }

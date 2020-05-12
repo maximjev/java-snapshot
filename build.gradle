@@ -27,6 +27,7 @@ repositories {
 
 dependencies {
     implementation 'com.monitorjbl:json-view:1.0.1'
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.11.0'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.11.0'
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.4.2'

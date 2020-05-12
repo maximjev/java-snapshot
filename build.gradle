@@ -6,6 +6,7 @@ buildscript {
     }
     dependencies {
         classpath 'net.researchgate:gradle-release:2.8.1'
+        classpath 'com.github.jengelman.gradle.plugins:shadow:5.2.0'
     }
 }
 
@@ -16,19 +17,12 @@ plugins {
 }
 
 apply plugin: 'net.researchgate.release'
-
-group 'com.github.maximjev'
-version '1.0.1'
+apply plugin: 'com.github.johnrengelman.shadow'
 
 sourceCompatibility = 1.8
 
 repositories {
     mavenCentral()
-}
-
-shadowJar {
-    relocate 'com.monitorjbl.json-view', 'shadow.com.monitorjbl.json-view'
-    relocate 'com.fasterxml.jackson', 'shadow.com.fasterxml.jackson'
 }
 
 dependencies {
@@ -109,10 +103,6 @@ if (project.hasProperty("ossrhUsername") && project.hasProperty("ossrhPassword")
                             email 'ma.prokofjev@gmail.com'
                         }
                     }
-                }
-
-                pom.whenConfigured {
-                    p -> p.dependencies = []
                 }
             }
         }

@@ -26,8 +26,15 @@ therefore, the data can be ignored, and only deterministic would be saved in a s
 
 A Snapshot test does not assert Java types. You can continue doing that with any other testing framework.
 
-## Installation [Maven](https://search.maven.org/search?q=java-snapshot-testing)
+## Installation [Maven](https://search.maven.org/search?q=java-snapshot)
 
+```maven
+<dependency>
+  <groupId>com.github.maximjev</groupId>
+  <artifactId>java-snapshot</artifactId>
+  <version>1.0.4</version>
+</dependency>
+```
 
 ## How does it work
 

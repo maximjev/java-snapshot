@@ -1,10 +1,5 @@
 package com.github.maximjev;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.PrettyPrinter;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -16,15 +11,10 @@ final class JsonSnapshotFile extends SnapshotFile {
         WRITE, READ
     }
 
-    private final ObjectMapper mapper;
-    private final PrettyPrinter printer;
-
     private final Map<String, Object> snapshots = new LinkedHashMap<>();
 
     private JsonSnapshotFile(Builder builder) {
         super(builder);
-        this.mapper = builder.configuration.getObjectMapper();
-        this.printer = builder.configuration.getPrettyPrinter();
     }
 
     @SuppressWarnings("unchecked")
@@ -32,14 +22,14 @@ final class JsonSnapshotFile extends SnapshotFile {
         if (content.isEmpty()) {
             return;
         }
-        Map<String, Object> fileContent = (Map<String, Object>) read(content);
+        Map<String, Object> fileContent = (Map<String, Object>) mapper.read(content);
         Object structured = structure(fileContent, ParseType.WRITE);
         this.snapshots.putAll((Map<String, Object>) structured);
     }
 
     protected String saveSnapshots() {
         Object structured = structure(snapshots, ParseType.READ);
-        return write(structured);
+        return mapper.write(structured);
     }
 
     private Object structure(Map<String, Object> snapshots, ParseType parseType) {
@@ -62,8 +52,8 @@ final class JsonSnapshotFile extends SnapshotFile {
     @SuppressWarnings("unchecked")
     private Object parseObject(Object object, ParseType parseType) {
         return ParseType.READ.equals(parseType)
-                ? read((String) object)
-                : write(object);
+                ? mapper.read((String) object)
+                : mapper.write(object);
     }
 
     protected void push(Snapshot snapshot, String content) {
@@ -91,22 +81,6 @@ final class JsonSnapshotFile extends SnapshotFile {
 
     private String format(Snapshot snapshot) {
         return String.format("%s.%s", snapshot.getClassName(), snapshot.getMethodName());
-    }
-
-    private Object read(String content) {
-        try {
-            return mapper.readValue(content, Object.class);
-        } catch (IOException e) {
-            throw new IllegalArgumentException(String.format("Failed to read snapshot %s", content), e);
-        }
-    }
-
-    private String write(Object obj) {
-        try {
-            return mapper.writer(printer).writeValueAsString(obj);
-        } catch (JsonProcessingException e) {
-            throw new IllegalArgumentException(String.format("Failed to write snapshot %s", obj), e);
-        }
     }
 
     @SuppressWarnings("unchecked")

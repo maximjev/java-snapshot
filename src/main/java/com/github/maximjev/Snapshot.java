@@ -1,21 +1,14 @@
 package com.github.maximjev;
 
 
-import java.util.HashSet;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Stream;
 
-import static java.util.Arrays.asList;
+import static com.github.maximjev.SnapshotUtils.concat;
 import static java.util.Optional.ofNullable;
 
 
 public final class Snapshot {
-    private static final Set<String> SKIPPED = new HashSet<>(asList(
-            Thread.class.getName(),
-            Snapshot.class.getName())
-    );
 
     private final SnapshotValidator validator;
 
@@ -27,35 +20,12 @@ public final class Snapshot {
     private DynamicFields dynamicFields;
 
     private Snapshot(Object object, Object... others) {
-        StackTraceElement element = findCaller();
-        this.validator = SnapshotConfiguration.getInstance()
+        StackTraceElement element = new StackTraceProcessor().findCaller();
+        this.validator = SnapshotConfiguration.INSTANCE
                 .getSnapshotValidator();
         this.object = concat(object, others);
         this.methodName = element.getMethodName();
         this.className = element.getClassName();
-    }
-
-    private Object concat(Object object, Object... others) {
-        Object[] result = new Object[others.length + 1];
-        result[0] = object;
-        System.arraycopy(others, 0, result, 1, others.length);
-        return result;
-    }
-
-    private StackTraceElement findCaller() {
-        StackTraceElement firstCaller = Stream.of(Thread.currentThread().getStackTrace())
-                .filter(s -> !SKIPPED.contains(s.getClassName()))
-                .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("Failed to find caller class"));
-
-        return findLastCaller(firstCaller);
-    }
-
-    private StackTraceElement findLastCaller(StackTraceElement firstCaller) {
-        return Stream.of(Thread.currentThread().getStackTrace())
-                .filter(s -> s.getClassName().equals(firstCaller.getClassName()))
-                .reduce((first, last) -> last)
-                .orElse(firstCaller);
     }
 
     public static Snapshot expect(Object object, Object... others) {

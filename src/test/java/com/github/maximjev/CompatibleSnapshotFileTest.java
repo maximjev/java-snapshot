@@ -5,6 +5,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.maximjev.model.NonReplaceableKeyMap;
 import com.github.maximjev.model.TestObject;
 import com.github.maximjev.model.TestSubobject;
+import com.monitorjbl.json.JsonViewModule;
+import com.monitorjbl.json.JsonViewSerializer;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
@@ -20,6 +22,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static com.github.maximjev.CompatibleSnapshotFormatter.SNAPSHOT_SEPARATOR;
 import static java.util.Arrays.asList;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -28,17 +31,17 @@ import static org.junit.jupiter.api.Assertions.*;
 public class CompatibleSnapshotFileTest {
     private static final String FILE_PATH = "src/test/java/__snapshots__";
     private static final String FILE_EXTENSION = "snap";
-    private static SnapshotConfiguration configuration;
+    private static final String ENTRY_SEPARATOR = "=";
     private static ObjectMapper mapper;
 
     @BeforeAll
     static void setup() {
-        configuration = new SnapshotConfiguration.Builder()
+        new SnapshotConfiguration.Builder()
                 .withFilePath(FILE_PATH)
-                .withFileExtension(FILE_EXTENSION)
                 .withJsonSnapshotCompatibility()
                 .build();
-        mapper = configuration.getObjectMapper();
+        mapper = new ObjectMapper()
+                .registerModule(new JsonViewModule(new JsonViewSerializer()));
     }
 
     String findSnapshot(String methodName) {
@@ -51,12 +54,12 @@ public class CompatibleSnapshotFileTest {
 
     Map<String, String> resolveSnapshots() {
         try {
-            String fileName = String.format("%s.%s", this.getClass().getSimpleName(), configuration.getFileExtension());
-            Path path = Paths.get(configuration.getFilePath(), fileName);
+            String fileName = String.format("%s.%s", this.getClass().getSimpleName(), FILE_EXTENSION);
+            Path path = Paths.get(FILE_PATH, fileName);
             byte[] bytes = Files.readAllBytes(path);
-            return Stream.of(new String(bytes).split(CompatibleSnapshotFile.SNAPSHOT_SEPARATOR))
+            return Stream.of(new String(bytes).split(SNAPSHOT_SEPARATOR))
                     .map(String::trim)
-                    .map(s -> s.split(CompatibleSnapshotFile.ENTRY_SEPARATOR))
+                    .map(s -> s.split(ENTRY_SEPARATOR))
                     .filter(s -> s.length == 2)
                     .collect(Collectors.toMap(s -> s[0], s -> s[1]));
         } catch (IOException ignored) {

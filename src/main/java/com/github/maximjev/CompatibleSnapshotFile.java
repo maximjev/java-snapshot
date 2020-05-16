@@ -2,77 +2,57 @@ package com.github.maximjev;
 
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static java.lang.String.join;
 
 final class CompatibleSnapshotFile extends SnapshotFile {
-    public static final String SNAPSHOT_SEPARATOR = "\n\n\n";
-    public static final String ENTRY_SEPARATOR = "=";
-
-    private static final int REGEX_FLAGS = Pattern.MULTILINE + Pattern.DOTALL;
-    private static final Pattern REGEX =
-            Pattern.compile("(?<name>[^ =]*) *=+ *(?<data>\\[.*\\])[^\\]]*", REGEX_FLAGS);
-
     private final Map<String, String> snapshots = new LinkedHashMap<>();
+    private final CompatibleSnapshotFormatter formatter;
 
     private CompatibleSnapshotFile(Builder builder) {
         super(builder);
+        this.formatter = new CompatibleSnapshotFormatter();
     }
 
     protected void loadSnapshots(String content) {
-        Stream.of(content.split(SNAPSHOT_SEPARATOR))
-                .filter(String::isEmpty)
-                .map(String::trim)
+        Stream.of(formatter.split(content))
+                .map(formatter::match)
                 .forEach(this::addSnapshot);
     }
 
-    private void addSnapshot(String raw) {
-        Matcher matcher = REGEX.matcher(raw);
-        if (!matcher.matches()) {
-            throw new IllegalArgumentException(
-                    "Raw data string does not match expected pattern. String: " + raw);
-        }
+    private void addSnapshot(Matcher matcher) {
         this.snapshots.put(matcher.group("name").trim(), matcher.group("data").trim());
     }
 
     protected String saveSnapshots() {
-        return snapshots.keySet()
+        return getAllSnapshots()
                 .stream()
-                .map(k -> raw(k, snapshots.get(k)))
                 .sorted()
-                .reduce(this::joinSnapshots)
+                .reduce(formatter::join)
                 .orElse("");
     }
 
+    private List<String> getAllSnapshots() {
+        return snapshots.keySet()
+                .stream()
+                .map(k -> formatter.formatRaw(k, snapshots.get(k)))
+                .collect(Collectors.toList());
+    }
+
     protected void push(Snapshot snapshot, String content) {
-        snapshots.put(format(snapshot), content);
+        snapshots.put(formatter.format(snapshot), content);
     }
 
     protected boolean exists(Snapshot snapshot) {
-        return snapshots.containsKey(format(snapshot));
+        return snapshots.containsKey(formatter.format(snapshot));
     }
 
     protected String get(Snapshot snapshot) {
-        return snapshots.get(format(snapshot));
-    }
-
-    private String format(Snapshot snapshot) {
-        if (snapshot.getScenario().isPresent()) {
-            return String.format("%s.%s[%s]", snapshot.getClassName(), snapshot.getMethodName(), snapshot.getScenario().get());
-        }
-        return String.format("%s.%s", snapshot.getClassName(), snapshot.getMethodName());
-    }
-
-    private String raw(String name, String data) {
-        return String.join("=", name, data);
-    }
-
-    private String joinSnapshots(String entry, String another) {
-        return join(SNAPSHOT_SEPARATOR, entry, another);
+        return snapshots.get(formatter.format(snapshot));
     }
 
     static final class Builder extends SnapshotFile.Builder<CompatibleSnapshotFile> {

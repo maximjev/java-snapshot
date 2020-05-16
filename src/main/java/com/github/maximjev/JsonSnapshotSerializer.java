@@ -1,8 +1,5 @@
 package com.github.maximjev;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.PrettyPrinter;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.monitorjbl.json.JsonView;
 import com.monitorjbl.json.Match;
 
@@ -12,22 +9,15 @@ import java.util.stream.Stream;
 
 final class JsonSnapshotSerializer implements SnapshotSerializer {
 
-    private final ObjectMapper mapper;
-    private final PrettyPrinter prettyPrinter;
+    private final ObjectMapperWrapper mapper;
 
-    JsonSnapshotSerializer(ObjectMapper mapper, PrettyPrinter prettyPrinter) {
+    JsonSnapshotSerializer(ObjectMapperWrapper mapper) {
         this.mapper = mapper;
-        this.prettyPrinter = prettyPrinter;
     }
 
     @Override
     public String serialize(Snapshot snapshot) {
-        try {
-            return mapper.writer(prettyPrinter)
-                    .writeValueAsString(buildView(snapshot));
-        } catch (JsonProcessingException e) {
-            throw new IllegalArgumentException(buildError(snapshot), e);
-        }
+        return mapper.write(buildView(snapshot));
     }
 
     private JsonView<?> buildView(Snapshot snapshot) {
@@ -49,9 +39,7 @@ final class JsonSnapshotSerializer implements SnapshotSerializer {
     }
 
     private JsonView<?> resolveMatches(Map<Class<?>, FieldMatch> matches, JsonView<?> view) {
-        if (!matches.isEmpty()) {
-            matches.forEach((c, m) -> view.onClass(c, toViewMatch(m)));
-        }
+        matches.forEach((c, m) -> view.onClass(c, toViewMatch(m)));
         return view;
     }
 

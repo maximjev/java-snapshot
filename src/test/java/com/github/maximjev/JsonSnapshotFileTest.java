@@ -24,15 +24,15 @@ import static org.junit.jupiter.api.Assertions.*;
 class JsonSnapshotFileTest {
 
     private static final String FILE_PATH = "src/test/java/__snapshots__";
-    private static SnapshotConfiguration configuration;
+    private static final String FILE_EXTENSION = "json";
     private static ObjectMapper mapper;
 
     @BeforeAll
     static void setup() {
-        configuration = new SnapshotConfiguration.Builder()
+        new SnapshotConfiguration.Builder()
                 .withFilePath(FILE_PATH)
                 .build();
-        mapper = configuration.getObjectMapper();
+        mapper = new ObjectMapper();
     }
 
     @SuppressWarnings("unchecked")
@@ -52,8 +52,8 @@ class JsonSnapshotFileTest {
     @SuppressWarnings("unchecked")
     LinkedHashMap<String, Object> resolveSnapshots() {
         try {
-            String fileName = String.format("%s.%s", this.getClass().getSimpleName(), configuration.getFileExtension());
-            Path path = Paths.get(configuration.getFilePath(), fileName);
+            String fileName = String.format("%s.%s", this.getClass().getSimpleName(), FILE_EXTENSION);
+            Path path = Paths.get(FILE_PATH, fileName);
             byte[] bytes = Files.readAllBytes(path);
             return mapper.readValue(new String(bytes), LinkedHashMap.class);
 

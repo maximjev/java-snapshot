@@ -1,77 +1,42 @@
 package com.github.maximjev;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.PrettyPrinter;
+import com.fasterxml.jackson.core.util.DefaultIndenter;
+import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.monitorjbl.json.JsonViewModule;
-import com.monitorjbl.json.JsonViewSerializer;
 
 
-public final class SnapshotConfiguration {
+public class SnapshotConfiguration {
     static String JVM_UPDATE_SNAPSHOTS_PARAMETER = "updateSnapshot";
-
-    private static SnapshotConfiguration INSTANCE;
-
-    private final String filePath;
-    private final String fileExtension;
-
-    private final StorageType storageType;
-
-    private final boolean compatibility;
-
-    private final ObjectMapper objectMapper;
-    private final PrettyPrinter prettyPrinter;
+    static SnapshotConfiguration INSTANCE = new Builder().build();
 
     private final SnapshotValidator validator;
 
     private SnapshotConfiguration(Builder builder) {
-        this.filePath = builder.filePath;
-        this.fileExtension = builder.fileExtension;
-        this.storageType = builder.storageType;
-        this.compatibility = builder.compatibility;
+        ObjectMapperWrapper objectMapperWrapper = new ObjectMapperWrapper(
+                builder.objectMapper,
+                builder.prettyPrinter
+        );
 
-        this.objectMapper = builder.objectMapper;
-        this.prettyPrinter = builder.prettyPrinter;
+        SnapshotFileFactory fileFactory = new SnapshotFileFactory(
+                builder.compatibility,
+                builder.filePath,
+                builder.fileExtension,
+                builder.storageType,
+                objectMapperWrapper
+        );
 
-        SnapshotSerializer snapshotSerializer = new JsonSnapshotSerializer(objectMapper, prettyPrinter);
-        this.validator = new SnapshotValidator(snapshotSerializer);
+        SnapshotSerializer snapshotSerializer = new JsonSnapshotSerializer(objectMapperWrapper);
+        this.validator = new SnapshotValidator(snapshotSerializer, fileFactory);
 
         INSTANCE = this;
     }
 
-    public static SnapshotConfiguration getInstance() {
-        if (INSTANCE == null) {
-            INSTANCE = new Builder().build();
-        }
-        return SnapshotConfiguration.INSTANCE;
-    }
-
     SnapshotValidator getSnapshotValidator() {
         return validator;
-    }
-
-    PrettyPrinter getPrettyPrinter() {
-        return prettyPrinter;
-    }
-
-    ObjectMapper getObjectMapper() {
-        return objectMapper;
-    }
-
-    StorageType getStorageType() {
-        return storageType;
-    }
-
-    String getFilePath() {
-        return filePath;
-    }
-
-    String getFileExtension() {
-        return fileExtension;
-    }
-
-    boolean isCompatibility() {
-        return compatibility;
     }
 
     public static final class Builder {
@@ -81,8 +46,8 @@ public final class SnapshotConfiguration {
 
         private StorageType storageType = StorageType.FLAT_DIRECTORY;
 
-        private ObjectMapper objectMapper = Defaults.INSTANCE.objectMapper();
-        private PrettyPrinter prettyPrinter = Defaults.INSTANCE.prettyPrinter();
+        private ObjectMapper objectMapper = objectMapper();
+        private PrettyPrinter prettyPrinter = prettyPrinter();
 
         public Builder() {
         }
@@ -114,23 +79,37 @@ public final class SnapshotConfiguration {
 
         public Builder withJsonSnapshotCompatibility() {
             this.compatibility = true;
+            this.storageType = StorageType.FLAT_DIRECTORY;
+            this.fileExtension = "snap";
+            this.objectMapper.configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true);
             return this;
         }
 
         public SnapshotConfiguration build() {
-            objectMapper.registerModule(new JsonViewModule(new JsonViewSerializer()));
-
-            if (compatibility) {
-                configureCompatible();
-            }
-
             return new SnapshotConfiguration(this);
         }
 
-        private void configureCompatible() {
-            this.storageType = StorageType.FLAT_DIRECTORY;
-            this.fileExtension = "snap";
-            this.objectMapper.configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true);
+        private ObjectMapper objectMapper() {
+            ObjectMapper mapper = new ObjectMapper();
+            return mapper
+                    .configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true)
+                    .setSerializationInclusion(JsonInclude.Include.NON_NULL)
+                    .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+                    .setVisibility(mapper
+                            .getSerializationConfig()
+                            .getDefaultVisibilityChecker()
+                            .withFieldVisibility(JsonAutoDetect.Visibility.ANY)
+                            .withGetterVisibility(JsonAutoDetect.Visibility.NONE)
+                            .withSetterVisibility(JsonAutoDetect.Visibility.NONE)
+                            .withCreatorVisibility(JsonAutoDetect.Visibility.NONE)
+                    );
+        }
+
+        private PrettyPrinter prettyPrinter() {
+            DefaultIndenter indenter = new DefaultIndenter("  ", "\n");
+            return new SnapshotPrettyPrinter()
+                    .withArrayIndenter(indenter)
+                    .withObjectIndenter(indenter);
         }
     }
 }

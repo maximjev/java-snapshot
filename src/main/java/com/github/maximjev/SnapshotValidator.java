@@ -8,23 +8,18 @@ final class SnapshotValidator {
     private final Map<String, SnapshotFile> currentFiles = new LinkedHashMap<>();
     private final SnapshotSerializer serializer;
 
-    private final SnapshotFileFactory snapshotFileFactory;
+    private final SnapshotFileFactory fileFactory;
 
-    SnapshotValidator(SnapshotSerializer serializer) {
+    SnapshotValidator(SnapshotSerializer serializer, SnapshotFileFactory snapshotFileFactory) {
         this.serializer = serializer;
-        this.snapshotFileFactory = new SnapshotFileFactory();
+        this.fileFactory = snapshotFileFactory;
     }
 
     void validate(Snapshot snapshot) {
         String serialized = serializer.serialize(snapshot);
         SnapshotFile file = getSnapshotFile(snapshot.getClassName());
 
-        if (shouldBeUpdated(snapshot, file)) {
-            file.push(snapshot, serialized);
-            return;
-        }
-
-        if (file.exists(snapshot)) {
+        if (shouldBeCompared(file, snapshot)) {
             compare(file.get(snapshot), serialized);
         } else {
             file.push(snapshot, serialized);
@@ -42,11 +37,18 @@ final class SnapshotValidator {
         file.push(snapshot, serialized);
     }
 
+    private boolean shouldBeCompared(SnapshotFile file, Snapshot snapshot) {
+        return file.exists(snapshot) && !shouldBeUpdated(snapshot);
+    }
+
     private SnapshotFile getSnapshotFile(String className) {
-        if (currentFiles.containsKey(className)) {
-            return currentFiles.get(className);
-        }
-        SnapshotFile file = snapshotFileFactory.create(className);
+        return currentFiles.containsKey(className)
+                ? currentFiles.get(className)
+                : createFile(className);
+    }
+
+    private SnapshotFile createFile(String className) {
+        SnapshotFile file = fileFactory.create(className);
         currentFiles.put(className, file);
         return file;
     }
@@ -57,10 +59,9 @@ final class SnapshotValidator {
         }
     }
 
-    private boolean shouldBeUpdated(Snapshot snapshot, SnapshotFile file) {
+    private boolean shouldBeUpdated(Snapshot snapshot) {
         return updatePattern().isPresent()
-                && snapshot.getClassName().contains(updatePattern().get())
-                && file.exists(snapshot);
+                && snapshot.getClassName().contains(updatePattern().get());
     }
 
     private Optional<String> updatePattern() {

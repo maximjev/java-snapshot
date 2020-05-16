@@ -26,8 +26,8 @@ public class JsonSnapshotSerializerTest {
 
     @BeforeEach
     void setup() {
-        mapper = SnapshotConfiguration.getInstance().getObjectMapper();
-        serializer = new JsonSnapshotSerializer(mapper, new DefaultPrettyPrinter());
+        mapper = new ObjectMapper();
+        serializer = new JsonSnapshotSerializer(new ObjectMapperWrapper(mapper, new DefaultPrettyPrinter()));
     }
 
     @Test

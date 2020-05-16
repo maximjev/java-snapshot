@@ -3,7 +3,6 @@ package com.github.maximjev;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.PrettyPrinter;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.maximjev.exception.SnapshotFileException;
 
 import java.io.IOException;
 import java.util.LinkedHashMap;
@@ -20,7 +19,7 @@ final class JsonSnapshotFile extends SnapshotFile {
     private final ObjectMapper mapper;
     private final PrettyPrinter printer;
 
-    private Map<String, Object> snapshots = new LinkedHashMap<>();
+    private final Map<String, Object> snapshots = new LinkedHashMap<>();
 
     private JsonSnapshotFile(Builder builder) {
         super(builder);
@@ -48,15 +47,20 @@ final class JsonSnapshotFile extends SnapshotFile {
                 .stream()
                 .collect(toMap(
                         Map.Entry::getKey,
-                        v -> parseObject(v.getValue(), parseType)
+                        v -> handleValue(v.getValue(), parseType)
                 ));
     }
 
     @SuppressWarnings("unchecked")
-    private Object parseObject(Object object, ParseType parseType) {
+    private Object handleValue(Object object, ParseType parseType) {
         if (object instanceof Map) {
             return structure((Map<String, Object>) object, parseType);
         }
+        return parseObject(object, parseType);
+    }
+
+    @SuppressWarnings("unchecked")
+    private Object parseObject(Object object, ParseType parseType) {
         return ParseType.READ.equals(parseType)
                 ? read((String) object)
                 : write(object);
@@ -75,19 +79,14 @@ final class JsonSnapshotFile extends SnapshotFile {
     }
 
     protected boolean exists(Snapshot snapshot) {
-        if (snapshots.containsKey(format(snapshot)) && !snapshot.getScenario().isPresent()) {
-            return true;
-        }
-        Map<String, Object> scenarios = getScenarios(snapshot);
-        return scenarios != null && scenarios.containsKey(snapshot.getScenario().get());
+        return (snapshots.containsKey(format(snapshot)) && !snapshot.getScenario().isPresent())
+                || getScenarios(snapshot).containsKey(snapshot.getScenario().get());
     }
 
     protected String get(Snapshot snapshot) {
-        if (snapshot.getScenario().isPresent()) {
-            Map<String, Object> scenarios = getScenarios(snapshot);
-            return (String) scenarios.get(snapshot.getScenario().get());
-        }
-        return (String) snapshots.get(format(snapshot));
+        return snapshot.getScenario().isPresent()
+                ? (String) getScenarios(snapshot).get(snapshot.getScenario().get())
+                : (String) snapshots.get(format(snapshot));
     }
 
     private String format(Snapshot snapshot) {
@@ -98,7 +97,7 @@ final class JsonSnapshotFile extends SnapshotFile {
         try {
             return mapper.readValue(content, Object.class);
         } catch (IOException e) {
-            throw new SnapshotFileException(String.format("Failed to read snapshot %s", content), e);
+            throw new IllegalArgumentException(String.format("Failed to read snapshot %s", content), e);
         }
     }
 
@@ -106,7 +105,7 @@ final class JsonSnapshotFile extends SnapshotFile {
         try {
             return mapper.writer(printer).writeValueAsString(obj);
         } catch (JsonProcessingException e) {
-            throw new SnapshotFileException(String.format("Failed to write snapshot %s", obj), e);
+            throw new IllegalArgumentException(String.format("Failed to write snapshot %s", obj), e);
         }
     }
 

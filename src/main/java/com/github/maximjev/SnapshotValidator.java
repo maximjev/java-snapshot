@@ -1,7 +1,5 @@
 package com.github.maximjev;
 
-import com.github.maximjev.exception.SnapshotMismatchException;
-
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;

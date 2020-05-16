@@ -1,22 +1,9 @@
-com.github.maximjev.CompatibleSnapshotFileTest.shouldIncludeFields=[
-  {
-    "str1": "aaaasdsssf",
-    "int1": 1,
-    "list": [
-      "red",
-      "blue",
-      "green"
-    ]
-  }
+com.github.maximjev.CompatibleSnapshotFileTest.a=[
+  "expected"
 ]
 
 
-com.github.maximjev.CompatibleSnapshotFileTest.shouldExcludeWildCard=[
-  { }
-]
-
-
-com.github.maximjev.CompatibleSnapshotFileTest.shouldCreateScenariosForParameterizedTests[third]=[
+com.github.maximjev.CompatibleSnapshotFileTest.shouldCreateScenariosForParameterizedTests[first]=[
   "expected"
 ]
 
@@ -27,6 +14,16 @@ com.github.maximjev.CompatibleSnapshotFileTest.shouldCreateScenariosForParameter
 
 
 com.github.maximjev.CompatibleSnapshotFileTest.shouldCreateScenariosForParameterizedTests[second]=[
+  "expected"
+]
+
+
+com.github.maximjev.CompatibleSnapshotFileTest.shouldCreateScenariosForParameterizedTests[third]=[
+  "expected"
+]
+
+
+com.github.maximjev.CompatibleSnapshotFileTest.shouldCreateSnapshotWithScenario[scenario]=[
   "expected"
 ]
 
@@ -47,13 +44,21 @@ com.github.maximjev.CompatibleSnapshotFileTest.shouldExcludeDynamicFields=[
 ]
 
 
-com.github.maximjev.CompatibleSnapshotFileTest.shouldCreateSnapshotWithScenario[scenario]=[
-  "expected"
+com.github.maximjev.CompatibleSnapshotFileTest.shouldExcludeWildCard=[
+  { }
 ]
 
 
-com.github.maximjev.CompatibleSnapshotFileTest.shouldResolveFirstCallerMethod=[
-  "expected"
+com.github.maximjev.CompatibleSnapshotFileTest.shouldIncludeFields=[
+  {
+    "str1": "aaaasdsssf",
+    "int1": 1,
+    "list": [
+      "red",
+      "blue",
+      "green"
+    ]
+  }
 ]
 
 
@@ -62,11 +67,6 @@ com.github.maximjev.CompatibleSnapshotFileTest.shouldMatchStringSnapshot=[
 ]
 
 
-com.github.maximjev.CompatibleSnapshotFileTest.shouldCreateScenariosForParameterizedTests[first]=[
-  "expected"
-]
-
-
-com.github.maximjev.CompatibleSnapshotFileTest.shouldUpdateSnapshot=[
+com.github.maximjev.CompatibleSnapshotFileTest.shouldResolveFirstCallerMethod=[
   "expected"
 ]

@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.monitorjbl.json.JsonViewModule;
 import com.monitorjbl.json.JsonViewSerializer;
 
-import java.util.Objects;
 
 public final class SnapshotConfiguration {
     static String JVM_UPDATE_SNAPSHOTS_PARAMETER = "updateSnapshot";
@@ -38,10 +37,6 @@ public final class SnapshotConfiguration {
         this.validator = new SnapshotValidator(snapshotSerializer);
 
         INSTANCE = this;
-    }
-
-    private static Defaults getDefaults() {
-        return Defaults.INSTANCE;
     }
 
     public static SnapshotConfiguration getInstance() {
@@ -86,8 +81,8 @@ public final class SnapshotConfiguration {
 
         private StorageType storageType = StorageType.FLAT_DIRECTORY;
 
-        private ObjectMapper objectMapper;
-        private PrettyPrinter prettyPrinter;
+        private ObjectMapper objectMapper = Defaults.INSTANCE.objectMapper();
+        private PrettyPrinter prettyPrinter = Defaults.INSTANCE.prettyPrinter();
 
         public Builder() {
         }
@@ -123,27 +118,19 @@ public final class SnapshotConfiguration {
         }
 
         public SnapshotConfiguration build() {
-            Objects.requireNonNull(filePath);
-            Objects.requireNonNull(fileExtension);
-            Objects.requireNonNull(storageType);
-
-            final Defaults defaults = getDefaults();
-
-            if (objectMapper == null) {
-                objectMapper = defaults.objectMapper();
-            }
             objectMapper.registerModule(new JsonViewModule(new JsonViewSerializer()));
 
-            if (prettyPrinter == null) {
-                prettyPrinter = defaults.prettyPrinter();
-            }
             if (compatibility) {
-                this.storageType = StorageType.FLAT_DIRECTORY;
-                this.fileExtension = "snap";
-                this.objectMapper.configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true);
+                configureCompatible();
             }
 
             return new SnapshotConfiguration(this);
+        }
+
+        private void configureCompatible() {
+            this.storageType = StorageType.FLAT_DIRECTORY;
+            this.fileExtension = "snap";
+            this.objectMapper.configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true);
         }
     }
 }

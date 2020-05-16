@@ -1,7 +1,6 @@
 package com.github.maximjev;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.maximjev.exception.SnapshotMismatchException;
 import com.github.maximjev.model.TestObject;
 import com.github.maximjev.model.TestSubobject;
 import org.junit.jupiter.api.Assertions;

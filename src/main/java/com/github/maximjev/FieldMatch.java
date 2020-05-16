@@ -2,6 +2,7 @@ package com.github.maximjev;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 public final class FieldMatch {
@@ -16,16 +17,12 @@ public final class FieldMatch {
     }
 
     public FieldMatch include(String... fields) {
-        if (fields != null) {
-            this.includes.addAll(Arrays.asList(fields));
-        }
+        this.includes.addAll(Arrays.asList(Objects.requireNonNull(fields)));
         return this;
     }
 
     public FieldMatch exclude(String... fields) {
-        if (fields != null) {
-            this.excludes.addAll(Arrays.asList(fields));
-        }
+        this.excludes.addAll(Arrays.asList(Objects.requireNonNull(fields)));
         return this;
     }
 

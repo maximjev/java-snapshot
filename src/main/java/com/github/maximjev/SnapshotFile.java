@@ -1,6 +1,5 @@
 package com.github.maximjev;
 
-import com.github.maximjev.exception.SnapshotFileException;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,6 +14,7 @@ abstract class SnapshotFile {
     SnapshotFile(Builder builder) {
         SnapshotConfiguration config = builder.configuration;
         this.fileName = resolveFileName(builder.name, config.getFileExtension());
+
         if (config.getStorageType().equals(StorageType.BY_PACKAGE_HIERARCHY)) {
             this.filePath = constructPackagePath(config.getFilePath(), builder.name);
         } else {
@@ -30,9 +30,6 @@ abstract class SnapshotFile {
 
     private String resolveFileName(String className, String extension) {
         String[] tokens = className.split("\\.");
-        if (tokens.length == 0) {
-            return className;
-        }
         return String.format("%s.%s", tokens[tokens.length - 1], extension);
     }
 
@@ -41,14 +38,18 @@ abstract class SnapshotFile {
         if (!file.exists()) {
             create(file);
         }
+
+        initSnapshots();
+        addShutdownHook();
+        return this;
+    }
+
+    private void initSnapshots() {
         try {
             loadSnapshots(new String(Files.readAllBytes(filePath)));
         } catch (IOException e) {
-            throw new SnapshotFileException(String.format("Failed to parse file %s content", fileName), e);
+            throw new IllegalArgumentException(String.format("Failed to parse file %s content", fileName), e);
         }
-
-        addShutdownHook();
-        return this;
     }
 
     private void addShutdownHook() {
@@ -56,7 +57,7 @@ abstract class SnapshotFile {
             try {
                 Files.write(filePath, saveSnapshots().getBytes());
             } catch (IOException e) {
-                throw new SnapshotFileException(String.format("Failed to save snapshot file %s:", fileName), e);
+                throw new IllegalArgumentException(String.format("Failed to save snapshot file %s:", fileName), e);
             }
         }));
     }
@@ -73,12 +74,10 @@ abstract class SnapshotFile {
 
     private void create(File file) {
         try {
-            if (!file.canWrite()) {
-                file.getParentFile().mkdirs();
-            }
+            file.getParentFile().mkdirs();
             file.createNewFile();
         } catch (IOException e) {
-            throw new SnapshotFileException(String.format("Failed to create snapshot file: %s", fileName), e);
+            throw new IllegalArgumentException(String.format("Failed to create snapshot file: %s", fileName), e);
         }
     }
 
@@ -86,12 +85,12 @@ abstract class SnapshotFile {
         private String name;
         protected SnapshotConfiguration configuration;
 
-        Builder withName(String name) {
+        Builder<T> withName(String name) {
             this.name = name;
             return this;
         }
 
-        Builder withConfiguration(SnapshotConfiguration configuration) {
+        Builder<T> withConfiguration(SnapshotConfiguration configuration) {
             this.configuration = configuration;
             return this;
         }

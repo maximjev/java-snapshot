@@ -3,7 +3,6 @@ package com.github.maximjev;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.PrettyPrinter;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.maximjev.exception.SerializationException;
 import com.monitorjbl.json.JsonView;
 import com.monitorjbl.json.Match;
 
@@ -27,7 +26,7 @@ final class JsonSnapshotSerializer implements SnapshotSerializer {
             return mapper.writer(prettyPrinter)
                     .writeValueAsString(buildView(snapshot));
         } catch (JsonProcessingException e) {
-            throw new SerializationException("Failed to serialize snapshot", e);
+            throw new IllegalArgumentException(buildError(snapshot), e);
         }
     }
 
@@ -36,7 +35,11 @@ final class JsonSnapshotSerializer implements SnapshotSerializer {
                 .of(JsonView.with(snapshot.getObject()))
                 .map(view -> dynamicFields(snapshot, view))
                 .findFirst()
-                .orElseThrow(() -> new SerializationException("Failed to serialize snapshot"));
+                .orElseThrow(() -> new IllegalArgumentException(buildError(snapshot)));
+    }
+
+    private String buildError(Snapshot snapshot) {
+        return String.format("Failed to serialize snapshot: %s", snapshot.getMethodName());
     }
 
     private JsonView<?> dynamicFields(Snapshot snapshot, JsonView<?> view) {

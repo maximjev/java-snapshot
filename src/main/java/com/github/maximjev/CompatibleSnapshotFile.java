@@ -1,8 +1,10 @@
 package com.github.maximjev;
 
-import java.util.HashMap;
+
+import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 import static java.lang.String.join;
@@ -11,25 +13,38 @@ final class CompatibleSnapshotFile extends SnapshotFile {
     public static final String SNAPSHOT_SEPARATOR = "\n\n\n";
     public static final String ENTRY_SEPARATOR = "=";
 
-    private Map<String, String> snapshots = new HashMap<>();
+    private static final int REGEX_FLAGS = Pattern.MULTILINE + Pattern.DOTALL;
+    private static final Pattern REGEX =
+            Pattern.compile("(?<name>[^ =]*) *=+ *(?<data>\\[.*\\])[^\\]]*", REGEX_FLAGS);
+
+    private final Map<String, String> snapshots = new LinkedHashMap<>();
 
     private CompatibleSnapshotFile(Builder builder) {
         super(builder);
     }
 
     protected void loadSnapshots(String content) {
-        this.snapshots = (Stream.of(content.split(SNAPSHOT_SEPARATOR))
+        Stream.of(content.split(SNAPSHOT_SEPARATOR))
+                .filter(String::isEmpty)
                 .map(String::trim)
-                .map(s -> s.split(ENTRY_SEPARATOR))
-                .filter(s -> s.length == 2)
-                .collect(Collectors.toMap(s -> s[0], s -> s[1])));
+                .forEach(this::addSnapshot);
+    }
+
+    private void addSnapshot(String raw) {
+        Matcher matcher = REGEX.matcher(raw);
+        if (!matcher.matches()) {
+            throw new IllegalArgumentException(
+                    "Raw data string does not match expected pattern. String: " + raw);
+        }
+        this.snapshots.put(matcher.group("name").trim(), matcher.group("data").trim());
     }
 
     protected String saveSnapshots() {
         return snapshots.keySet()
                 .stream()
-                .map(k -> join(ENTRY_SEPARATOR, k, snapshots.get(k)))
-                .reduce((s, c) -> join(SNAPSHOT_SEPARATOR, c, s))
+                .map(k -> raw(k, snapshots.get(k)))
+                .sorted()
+                .reduce(this::joinSnapshots)
                 .orElse("");
     }
 
@@ -50,6 +65,14 @@ final class CompatibleSnapshotFile extends SnapshotFile {
             return String.format("%s.%s[%s]", snapshot.getClassName(), snapshot.getMethodName(), snapshot.getScenario().get());
         }
         return String.format("%s.%s", snapshot.getClassName(), snapshot.getMethodName());
+    }
+
+    private String raw(String name, String data) {
+        return String.join("=", name, data);
+    }
+
+    private String joinSnapshots(String entry, String another) {
+        return join(SNAPSHOT_SEPARATOR, entry, another);
     }
 
     static final class Builder extends SnapshotFile.Builder<CompatibleSnapshotFile> {

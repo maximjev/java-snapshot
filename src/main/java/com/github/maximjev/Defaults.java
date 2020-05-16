@@ -36,20 +36,18 @@ final class Defaults {
 
     PrettyPrinter prettyPrinter() {
         DefaultIndenter indenter = new DefaultIndenter("  ", "\n");
-        return buildDefaultPrettyPrinter()
+        return new SnapshotPrettyPrinter()
                 .withArrayIndenter(indenter)
                 .withObjectIndenter(indenter);
     }
 
-    private DefaultPrettyPrinter buildDefaultPrettyPrinter() {
-        return new DefaultPrettyPrinter("") {
-            @Override
-            public DefaultPrettyPrinter withSeparators(Separators separators) {
-                this._separators = separators;
-                this._objectFieldValueSeparatorWithSpaces =
-                        separators.getObjectFieldValueSeparator() + " ";
-                return this;
-            }
-        };
+    private static final class SnapshotPrettyPrinter extends DefaultPrettyPrinter {
+        @Override
+        public DefaultPrettyPrinter withSeparators(Separators separators) {
+            this._separators = separators;
+            this._objectFieldValueSeparatorWithSpaces =
+                    separators.getObjectFieldValueSeparator() + " ";
+            return this;
+        }
     }
 }

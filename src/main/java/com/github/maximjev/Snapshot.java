@@ -1,6 +1,5 @@
 package com.github.maximjev;
 
-import com.github.maximjev.exception.SnapshotFileException;
 
 import java.util.HashSet;
 import java.util.Objects;
@@ -44,15 +43,19 @@ public final class Snapshot {
     }
 
     private StackTraceElement findCaller() {
-        StackTraceElement lastCaller = Stream.of(Thread.currentThread().getStackTrace())
+        StackTraceElement firstCaller = Stream.of(Thread.currentThread().getStackTrace())
                 .filter(s -> !SKIPPED.contains(s.getClassName()))
                 .findFirst()
-                .orElseThrow(() -> new SnapshotFileException("Failed to find caller class"));
+                .orElseThrow(() -> new IllegalArgumentException("Failed to find caller class"));
 
+        return findLastCaller(firstCaller);
+    }
+
+    private StackTraceElement findLastCaller(StackTraceElement firstCaller) {
         return Stream.of(Thread.currentThread().getStackTrace())
-                .filter(s -> s.getClassName().equals(lastCaller.getClassName()))
+                .filter(s -> s.getClassName().equals(firstCaller.getClassName()))
                 .reduce((first, last) -> last)
-                .orElse(lastCaller);
+                .orElse(firstCaller);
     }
 
     public static Snapshot expect(Object object, Object... others) {

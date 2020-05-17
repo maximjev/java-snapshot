@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.function.Supplier;
 
 class FileHandler {
 
@@ -15,7 +16,7 @@ class FileHandler {
         return loadContent(file);
     }
 
-    void saveOnExit(Path path, String content) {
+    void saveOnExit(Path path, Supplier<String> content) {
         SnapshotFileExitHook hook = new SnapshotFileExitHook(path, content);
         Runtime.getRuntime().addShutdownHook(new Thread(hook));
     }

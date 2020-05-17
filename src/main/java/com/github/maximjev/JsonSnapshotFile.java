@@ -69,8 +69,17 @@ final class JsonSnapshotFile extends SnapshotFile {
     }
 
     protected boolean exists(Snapshot snapshot) {
-        return (snapshots.containsKey(format(snapshot)) && !snapshot.getScenario().isPresent())
-                || getScenarios(snapshot).containsKey(snapshot.getScenario().get());
+        return existsNormal(snapshot) || existsWithScenario(snapshot);
+    }
+
+    private boolean existsNormal(Snapshot snapshot) {
+        return snapshots.containsKey(format(snapshot)) && !snapshot.getScenario().isPresent();
+    }
+
+    private boolean existsWithScenario(Snapshot snapshot) {
+        return snapshots.containsKey(format(snapshot))
+                && snapshot.getScenario().isPresent()
+                && getScenarios(snapshot).containsKey(snapshot.getScenario().get());
     }
 
     protected String get(Snapshot snapshot) {

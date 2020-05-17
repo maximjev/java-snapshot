@@ -16,7 +16,7 @@ abstract class SnapshotFile {
 
     SnapshotFile init() {
         loadSnapshots(fileHandler.read(filePath));
-        fileHandler.saveOnExit(filePath, saveSnapshots());
+        fileHandler.saveOnExit(filePath, this::saveSnapshots);
         return this;
     }
 

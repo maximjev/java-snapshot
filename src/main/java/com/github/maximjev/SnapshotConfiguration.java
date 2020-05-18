@@ -81,7 +81,8 @@ public class SnapshotConfiguration {
             this.compatibility = true;
             this.storageType = StorageType.FLAT_DIRECTORY;
             this.fileExtension = "snap";
-            this.objectMapper.configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true);
+            this.objectMapper.configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true)
+                    .configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, false);
             return this;
         }
 

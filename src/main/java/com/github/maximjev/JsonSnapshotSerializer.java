@@ -17,7 +17,8 @@ final class JsonSnapshotSerializer implements SnapshotSerializer {
 
     @Override
     public String serialize(Snapshot snapshot) {
-        return mapper.write(buildView(snapshot));
+        boolean dynamicFields = snapshot.getDynamicFields().isPresent();
+        return mapper.write(dynamicFields ? buildView(snapshot) : snapshot.getObject());
     }
 
     private JsonView<?> buildView(Snapshot snapshot) {
@@ -33,9 +34,7 @@ final class JsonSnapshotSerializer implements SnapshotSerializer {
     }
 
     private JsonView<?> dynamicFields(Snapshot snapshot, JsonView<?> view) {
-        return snapshot.getDynamicFields().isPresent()
-                ? resolveMatches(snapshot.getDynamicFields().get().getMatches(), view)
-                : view;
+        return resolveMatches(snapshot.getDynamicFields().get().getMatches(), view);
     }
 
     private JsonView<?> resolveMatches(Map<Class<?>, FieldMatch> matches, JsonView<?> view) {

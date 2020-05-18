@@ -32,7 +32,7 @@ A Snapshot test does not assert Java types. You can continue doing that with any
 <dependency>
   <groupId>com.github.maximjev</groupId>
   <artifactId>java-snapshot</artifactId>
-  <version>1.0.4</version>
+  <version>1.0.6</version>
 </dependency>
 ```
 

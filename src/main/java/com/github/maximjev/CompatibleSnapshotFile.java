@@ -20,6 +20,7 @@ final class CompatibleSnapshotFile extends SnapshotFile {
 
     protected void loadSnapshots(String content) {
         Stream.of(formatter.split(content))
+                .filter(s -> !s.isEmpty())
                 .map(formatter::match)
                 .forEach(this::addSnapshot);
     }
